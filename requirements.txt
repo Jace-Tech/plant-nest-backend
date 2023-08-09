@@ -1,0 +1,6 @@
+Flask>=2.2.2
+python-dotenv>=0.21.0
+gunicorn>=21.0.0
+cloudinary
+Flask-Mail>=0.9.1
+mysql-connector-python>=8.0.33
