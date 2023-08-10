@@ -96,7 +96,6 @@ def handle_plant_create():
   except CustomError as e: 
     flash(e.message, category=e.category)
 
-
   except Exception as e:
     flash(str(e), category="error")
 
