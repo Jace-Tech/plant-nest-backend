@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, render_template
 from .utils.helpers import response
 from .utils.variables import APP_NAME, MAIL_SERVER, MAIL_PASSWORD, MAIL_PORT, APP_SECRET, MAIL_USERNAME
 
@@ -34,8 +34,8 @@ def create_app():
     # RETURN A JSON RESPONSE FOR API REQUESTS 
     if "/api/v1" in url: return response("Invalid route", None, False)
 
-    # REDIRECT TO LOGIN PAGE
-    return redirect(url_for('auth.login_page'))
+    # REDIRECT 
+    return render_template("404.html", APP_NAME=APP_NAME)
   
   
   @app.errorhandler(Exception)
