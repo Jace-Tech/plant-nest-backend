@@ -15,3 +15,12 @@ def create_category_table():
   connection.commit()
   print("TABLE CREATED!")
   connection.close()
+
+
+def get_all_categories():
+  db = get_connection()
+  if not db: return
+  _, cursor = db
+  sql = "SELECT * FROM categories"
+  cursor.execute(sql)
+  return cursor.fetchall()

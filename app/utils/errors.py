@@ -10,6 +10,15 @@ class CustomRequestError(Exception):
     self.message = message
     self.code = code
 
+class CustomError(Exception):
+  """
+    Request error class
+  """
+  def __init__(self, message, category= "error"):
+    super().__init__(message)
+    self.message = message
+    self.category = category
+
 
 def catch_exception(fn):
   @wraps(fn) 

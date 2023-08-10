@@ -8,3 +8,6 @@ api = Blueprint("apis", __name__)
 @api.get("/")
 def default_api():
   return response(f"{APP_NAME} API is running")
+
+from .test import test
+api.register_blueprint(test, url_prefix="/test")

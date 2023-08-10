@@ -9,6 +9,7 @@ def create_app():
   # APP CONFIGS
   app.config["APP_NAME"] = APP_NAME
   app.config["APP_SECRET"] = APP_SECRET
+  app.config["SECRET_KEY"] = APP_SECRET
 
   # MAIL CONFIGS
   app.config['MAIL_SERVER'] = MAIL_SERVER

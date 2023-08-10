@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
   {% block metas %} {% endblock %}
-  <title>{% block title %} Dashboard {% endblock %}</title>
+  <title>{{ title or "Dashboard" }}</title>
 
   <!-- Custom fonts for this template-->
   <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -26,10 +26,9 @@
 
   <!-- Page Wrapper -->
   <div id="wrapper">
-
     <!-- Sidebar -->
+    {{ get_flashed_messages(with_categories=true) }}
     {% include "includes/Sidebar.html" %}
-    <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -38,36 +37,29 @@
       <div id="content">  
         <!-- Topbar -->
         {% include "includes/Topbar.html" %}
-        <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
+
           <!-- Page Heading -->
-          <h1 class="h3 mb-4 text-gray-800">{% block title %} Dashboard {% endblock %}</h1>
+          <h1 class="h3 mb-4 text-gray-800">{{ title or "Dashboard" }}</h1>
           {% block content %} {% endblock %}
         </div>
-        <!-- /.container-fluid -->
-
       </div>
-      <!-- End of Main Content -->
 
       <!-- Footer -->
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy; {{ "now"|datetime("Y") }}</span>
+            <span>Copyright &copy; plantnest <script>document.write((new Date()).getFullYear())</script></span>
           </div>
         </div>
       </footer>
       <!-- End of Footer -->
 
     </div>
-    <!-- End of Content Wrapper -->
-
   </div>
-  <!-- End of Page Wrapper -->
 
-  <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
@@ -101,6 +93,7 @@
 
   <!-- Custom scripts for all pages-->
   <script src="/static/js/sb-admin-2.min.js"></script>
+  {% block scripts %}{% endblock %}
 
 </body>
 

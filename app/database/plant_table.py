@@ -13,6 +13,7 @@ def create_plant_table():
     `price` FLOAT,
     `quantity` INT,
     `image_url` VARCHAR(200),
+    `is_available` TINYINT DEFAULT 1,
     `category_id` VARCHAR(20),
     FOREIGN KEY (`category_id`) REFERENCES categories(`category_id`)
   )"""
@@ -21,3 +22,17 @@ def create_plant_table():
   connection.commit()
   print("TABLE CREATED!")
   connection.close()
+
+
+def get_all_plants():
+  db = get_connection()
+  if not db: return
+  _, cursor = db
+  sql = """
+    SELECT P.*, C.name AS category_name 
+    FROM plants AS P 
+    INNER JOIN categories AS C 
+    ON P.category_id = C.category_id"""
+
+  cursor.execute(sql)
+  return cursor.fetchall()

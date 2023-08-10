@@ -12,7 +12,7 @@ from .auth  import auth
 dashboard.register_blueprint(auth)
 
 # PRODUCT ROUTES
-from .product import product
-dashboard.register_blueprint(product, url_prefix="/product")
+from .plants import plants
+dashboard.register_blueprint(plants, url_prefix="/plants")
 
 
