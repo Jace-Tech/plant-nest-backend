@@ -17,9 +17,9 @@ def create_app():
   app.config['MAIL_USERNAME'] = MAIL_USERNAME
   app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
 
-  # ROUTES 
-  from .views.auth import auth
-  app.register_blueprint(auth)
+  # ALL ADMIN ROUTES 
+  from .views import dashboard
+  app.register_blueprint(dashboard)
 
   # API ENDPOINT
   from .apis import api
@@ -40,6 +40,7 @@ def create_app():
   
   @app.errorhandler(Exception)
   def server_error(error):
+    print("ERROR:", error)
     return response("Something went wrong, please try again", None, False)
 
   return app

@@ -1,13 +1,10 @@
 from functools import wraps
+from datetime import datetime
 
 def response(msg: str, data=None, success=True):
   return { "message": msg, "data": data, "success": success }
 
-def get_object(obj):
-  new_data = {}
-  for key, val in obj.items():
-    new_data[key] = str(val)
-  return new_data
 
-def get_object_list(seq):
-  return [get_object(data) for data in seq]
+def generate_id(prefix: str = "id_"):
+  timestamp = datetime.now().timestamp()
+  return prefix + str(timestamp)
