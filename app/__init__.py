@@ -47,6 +47,7 @@ def create_app():
 
     @app.errorhandler(Exception)
     def server_error(error):
+        print(error)
         return response("Something went wrong, please try again", None, False)
 
     return app
