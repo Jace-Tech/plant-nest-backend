@@ -30,18 +30,22 @@ def create_app():
   # ERROR ROUTES
   @app.errorhandler(404)
   def invalid_route(error):
+    print("ERROR 404:", error)
     url = request.url
-    
     # RETURN A JSON RESPONSE FOR API REQUESTS 
     if "/api/v1" in url: return response("Invalid route", None, False)
 
-    # REDIRECT 
+    # REDIRECT
     return render_template("404.html", APP_NAME=APP_NAME)
   
   
   @app.errorhandler(Exception)
   def server_error(error):
-    print("ERROR:", error)
-    return response("Something went wrong, please try again", None, False)
+    print("ERROR 500:", error)
+    url = request.url
+    if "/api/v1" in url: return response(str(error), None, False)
+
+    # REDIRECT
+    return render_template("500.html")
 
   return app
