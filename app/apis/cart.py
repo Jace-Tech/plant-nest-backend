@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from utils.helpers import select_product,response 
+from utils.helpers import select_product,response,select_product,insert_item,remove_product,products_by_user
 from app import app
 
 from ..database import get_connection
@@ -8,60 +8,49 @@ cart = Blueprint("cart", __name__)
 
 connection, cursor = get_connection()
 
-
-cart_data = {}
-
+tableName = "cart_items"
 
 
-@app.route('/api/cart/add/<user_id>/<product_id>/<int:quantity>', methods=['POST'])
+@app.route('/api/cart/add/', methods=['POST'])
 def add_to_cart(product,cursor):
-    user_id = product['user_id']
     
-    if user_id not in cart_data:
-        cart_data[user_id] = []
-        
+    status = insert_item(product,cursor,tableName); 
     
-    productDictionary = select_product(product['product_id'],cursor)
+    if status == True:
+        return response('Item added to the cart successfully.')
     
-    productDictionary['quantity'] = product['quantity']
+    return response('Item was not added to the cart successfully.', success=False)
     
-  
-    cart_data[user_id].append({"product": productDictionary})
-    
-    return response('Item added to the cart successfully.',cart_data[user_id])
     
 @app.route('/api/cart/<user_id>', methods=['GET'])
 def get_cart_contents(user_id):
-    if user_id in cart_data:
-        cart_items = cart_data[user_id]
-        cart_products = []  
-        
-        for item in cart_items:
-            product = item["product"]
-            cart_products.append(product)
-        
-        return response(f"user_id': {user_id}",cart_products)
-    else:
-        return response(f"User not found or cart is empty.",success=False)
+    
+    try:
+        user_cart = products_by_user(user_id, cursor,tableName)
 
+        if user_cart is not None:
+            cart_with_product_data = []
 
-@app.route('/api/cart/remove/<user_id>/<product_id>', methods=['DELETE'])
-def remove_from_cart(user_id, product_id):
-    if user_id in cart_data:
-        cart_items = cart_data[user_id]
-        
-      
-        index_to_remove = None
-        for index, item in enumerate(cart_items):
-            if item["product"]["product_id"] == product_id:
-                index_to_remove = index
-                break
-        
-        if index_to_remove is not None:
-            removed_product = cart_items.pop(index_to_remove)
-            return response(f"Item removed from the cart successfully", removed_product)
+            for item in user_cart:
+                product_id = item['product_id']
+                product_details = select_product(product_id, cursor)
+                if product_details:
+                    item['product_details'] = product_details
+                    cart_with_product_data.append(item)
+
+            return response(f'user_id: {user_id}', cart_with_product_data)
         else:
-            return response('Product not found in the user\'s cart.',success=False), 404
+            return response('User not found or cart is empty.', success=False)
+    except Exception as e:
+        return response('An error occurred.', success=False)
+
+
+@app.route('/api/cart/remove/<product_id>', methods=['POST'])
+def remove_from_cart(product):
+    status = remove_product(product,cursor,tableName)
+    if status == True:
+            return response(f"Item removed from the cart successfully")
     else:
-        return response('User not found or cart is empty.',success=False), 404
+            return response('Product not found in the user\'s cart.',status,success=False), 404
+   
 
