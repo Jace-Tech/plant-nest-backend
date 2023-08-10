@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, redirect, url_for
 from .utils.helpers import response
 from .utils.variables import APP_NAME, MAIL_SERVER, MAIL_PASSWORD, MAIL_PORT, APP_SECRET, MAIL_USERNAME
 
@@ -21,18 +21,24 @@ def create_app():
   from .views.auth import auth
   app.register_blueprint(auth)
 
-
   # API ENDPOINT
   from .apis import api
   app.register_blueprint(api, url_prefix="/api/v1")
 
+
   # ERROR ROUTES
-  app.errorhandler(404)
+  @app.errorhandler(404)
   def invalid_route(error):
-    print('REQUEST URL:', request.url)
-    return response("Invalid route", None, False)
+    url = request.url
+    
+    # RETURN A JSON RESPONSE FOR API REQUESTS 
+    if "/api/v1" in url: return response("Invalid route", None, False)
+
+    # REDIRECT TO LOGIN PAGE
+    return redirect(url_for('auth.login_page'))
   
-  app.errorhandler(Exception)
+  
+  @app.errorhandler(Exception)
   def server_error(error):
     return response("Something went wrong, please try again", None, False)
 
