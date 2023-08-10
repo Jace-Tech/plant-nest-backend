@@ -13,7 +13,7 @@ def create_product_cart_table():
     product_id INT,
     quantity INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
+    FOREIGN KEY (product_id) REFERENCES plant(plant_id)
 )"""
 
     cursor.execute(sql)

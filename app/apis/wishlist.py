@@ -12,7 +12,8 @@ tableName = "wishlist_items"
 
 
 @app.route('/api/wishlist/add/', methods=['POST'])
-def add_to_wishlist(product,cursor):
+def add_to_wishlist(cursor):
+    product =  request.get_json()
     
     status = insert_item(product,cursor,tableName); 
     
@@ -45,8 +46,9 @@ def get_wishlist_contents(user_id):
         return response('An error occurred.', success=False)
 
 
-@app.route('/api/wishlist/remove/<product_id>', methods=['POST'])
-def remove_from_wishlist(product):
+@app.route('/api/wishlist/remove/', methods=['POST'])
+def remove_from_wishlist():
+    product =  request.get_json()
     status = remove_product(product,cursor,tableName)
     if status == True:
             return response(f"Item removed from the wishlist successfully")

@@ -14,7 +14,7 @@ def create_user_feedback_table():
         rating INT NOT NULL,
         feedback TEXT,
         FOREIGN KEY (user_id) REFERENCES users(user_id),
-        FOREIGN KEY (product_id) REFERENCES products(product_id)
+        FOREIGN KEY (product_id) REFERENCES plants(plant_id)
     )"""
 
     cursor.execute(sql)
