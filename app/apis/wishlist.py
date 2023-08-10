@@ -11,7 +11,7 @@ connection, cursor = get_connection()
 tableName = "wishlist_items"
 
 
-@app.route('/api/wishlist/add/', methods=['POST'])
+@wishlist.get('/add')
 def add_to_wishlist(cursor):
     product =  request.get_json()
     
@@ -23,7 +23,7 @@ def add_to_wishlist(cursor):
     return response('Item was not added to the wishlist successfully.', success=False)
     
     
-@app.route('/api/wishlist/<user_id>', methods=['GET'])
+@wishlist.get('/<user_id>')
 def get_wishlist_contents(user_id):
     
     try:
@@ -46,7 +46,7 @@ def get_wishlist_contents(user_id):
         return response('An error occurred.', success=False)
 
 
-@app.route('/api/wishlist/remove/', methods=['POST'])
+@wishlist.get('/remove')
 def remove_from_wishlist():
     product =  request.get_json()
     status = remove_product(product,cursor,tableName)

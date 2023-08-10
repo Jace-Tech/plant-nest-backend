@@ -11,7 +11,7 @@ connection, cursor = get_connection()
 tableName = "cart_items"
 
 
-@app.route('/api/cart/add/', methods=['POST'])
+@cart.get('/add')
 def add_to_cart(cursor):
     
     product =  request.get_json()
@@ -24,7 +24,7 @@ def add_to_cart(cursor):
     return response('Item was not added to the cart successfully.', success=False)
     
     
-@app.route('/api/cart/<user_id>', methods=['GET'])
+@cart.get('/<user_id>')
 def get_cart_contents(user_id):
     
     try:
@@ -47,7 +47,7 @@ def get_cart_contents(user_id):
         return response('An error occurred.', success=False)
 
 
-@app.route('/api/cart/remove/', methods=['POST'])
+@cart.get('/remove')
 def remove_from_cart():
     product =  request.get_json()
     status = remove_product(product,cursor,tableName)
