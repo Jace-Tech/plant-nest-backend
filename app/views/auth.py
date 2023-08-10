@@ -4,9 +4,9 @@ import jwt
 import uuid
 import datetime
 import bcrypt
+from flask_jwt_extended import create_access_token
 from ..utils.admin_manager import admin_manager
 from ..database import get_connection
-from app import create_app
 
 auth = Blueprint("auth", __name__)
 app = current_app
@@ -34,9 +34,8 @@ def handle_login_page():
         return jsonify({"message": "Invalid email or password"}), 401
 
     # Generate JWT token
-    secret_key = str(app.config["APP_SECRET"])
-    payload = {"user_id": user["user_id"], "username": user["username"]}
-    token = jwt.encode(payload, secret_key, algorithm="HS256")
+    token = create_access_token(identity=user["user_id"])
+    print(token)
 
     return jsonify({"message": "Login successful", "token": token}), 200
 
@@ -55,7 +54,6 @@ def signup_page():
     user_username = cursor.fetchone()
     cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
     user_email = cursor.fetchone()
-    cursor.close()
 
     if user_email:
         return jsonify({"message": "Email already exists"}), 400
@@ -63,17 +61,21 @@ def signup_page():
     if user_username:
         return jsonify({"message": "Username already exists"}), 400
 
+    # Insert the user into the database
     user_id = str(uuid.uuid4())[:20]
     hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
     sql = "INSERT INTO users (user_id, fullname, username, contact_number, email, password) VALUES (%s, %s, %s, %s, %s, %s)"
     cursor.execute(sql, (user_id, fullname, username, contact_number, email, hashed_password))
     connection.commit()
+
+    # Login the user immediately
+    sql = "SELECT user_id FROM users WHERE email = %s"
+    cursor.execute(sql, (email,))
+    user = cursor.fetchone()
     cursor.close()
 
-    # Generate a JWT
-    payload = {"username": username, "exp": datetime.datetime.utcnow() + datetime.timedelta(days=1)}
-    secret_key = str(app.config['SECRET_KEY'])
-    token = jwt.encode(payload, secret_key, algorithm="HS256")
+    token = create_access_token(identity=user['user_id'])
+
     return jsonify({"message": "User registered successfully", "token": token}), 201
 
 

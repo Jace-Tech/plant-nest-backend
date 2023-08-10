@@ -1,15 +1,21 @@
 from flask import Flask, request, redirect, url_for
+from flask_jwt_extended import  JWTManager
 from .utils.helpers import response
-from .utils.variables import APP_NAME, MAIL_SERVER, MAIL_PASSWORD, MAIL_PORT, APP_SECRET, MAIL_USERNAME
+from .utils.variables import APP_NAME, MAIL_SERVER, MAIL_PASSWORD, MAIL_PORT, APP_SECRET, MAIL_USERNAME, JWT_SECRET
 
 
 def create_app():
     app = Flask(__name__)
 
+    jwt = JWTManager(app)
     # ***** CONFIGS ***** #
+
     # APP CONFIGS
     app.config["APP_NAME"] = APP_NAME
     app.config["APP_SECRET"] = APP_SECRET
+
+    # Configure the JWT Secret key
+    app.config["JWT_SECRET_KEY"] = JWT_SECRET
 
     # MAIL CONFIGS
     app.config['MAIL_SERVER'] = MAIL_SERVER
@@ -20,7 +26,9 @@ def create_app():
 
     # ROUTES
     from .views.auth import auth
+    from app.apis.user import user
     app.register_blueprint(auth)
+    app.register_blueprint(user)
 
     # API ENDPOINT
     from .apis import api
