@@ -14,7 +14,6 @@ class CustomRequestError(Exception):
 def catch_exception(fn):
   @wraps(fn) 
   def wrapper(*args, **kwargs):
-    gamer = "JACE"
     try:
       return fn(*args, **kwargs)
     
