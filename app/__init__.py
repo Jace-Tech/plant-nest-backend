@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, render_template
 from flask_jwt_extended import  JWTManager
 from .utils.helpers import response
 from .utils.variables import APP_NAME, MAIL_SERVER, MAIL_PASSWORD, MAIL_PORT, APP_SECRET, MAIL_USERNAME, JWT_SECRET
@@ -28,9 +28,9 @@ def create_app():
   
   # TODO: REMEMBER TO FIX THIS
   from .views.auth import auth
-    from app.apis.user import user
-    app.register_blueprint(auth)
-    app.register_blueprint(user)
+  from app.apis.user import user
+  app.register_blueprint(auth)
+  app.register_blueprint(user)
 
   # API ENDPOINT
   from .apis import api

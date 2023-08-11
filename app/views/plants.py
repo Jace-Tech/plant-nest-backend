@@ -58,7 +58,7 @@ def handle_plant_create():
   try:
     data = request.form
 
-    plant_id = generate_id("pln")
+    plant_id = generate_id("pln_")
     plant_name = (data.get('name'))
     category = data.get('category')
     quantity = data.get('quantity')

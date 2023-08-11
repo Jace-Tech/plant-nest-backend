@@ -27,7 +27,6 @@
   <!-- Page Wrapper -->
   <div id="wrapper">
     <!-- Sidebar -->
-    {{ get_flashed_messages(with_categories=true) }}
     {% include "includes/Sidebar.html" %}
 
     <!-- Content Wrapper -->
@@ -35,6 +34,8 @@
 
       <!-- Main Content -->
       <div id="content">  
+
+        {% include "includes/Alert.html" %}
         <!-- Topbar -->
         {% include "includes/Topbar.html" %}
 

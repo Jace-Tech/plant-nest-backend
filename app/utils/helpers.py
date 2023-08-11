@@ -28,7 +28,8 @@ def select_product(product_id,cursor):
     return str(e)
   
   
-def insert_item(product, cursor ,tableName):
+def insert_item(product, db ,tableName):
+  conn, cursor = db
   try:
     user_id = product.get('user_id')
     product_id = product.get('product_id')
@@ -45,6 +46,9 @@ def insert_item(product, cursor ,tableName):
     else:
       insert_query = f"INSERT INTO {tableName} (user_id, product_id, quantity) VALUES (%s, %s, %s)"
       cursor.execute(insert_query, (user_id, product_id, quantity))
+
+    conn.commit()
+  
     return True
   except Exception as e:
     print("INSERT ERROR:", str(e))
