@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, flash, request, redirect, url_for
 import json
+import csv
 from ..database import get_connection
 from ..database.plant_table import get_all_plants
 from ..database.category_table import get_all_categories
@@ -102,3 +103,111 @@ def handle_plant_create():
 
 
 
+@plants.get("/delete/<id>")
+def handle_plant_delete(id):
+    try:
+        # CHECK CONNECTION
+        db = get_connection()
+        if not db: raise CustomError("Couldn't connect to database", "error")
+
+        conn, cursor = db
+        sql = "DELETE FROM plants WHERE plant_id = %s"
+        cursor.execute(sql, [id])
+        conn.commit()
+        conn.close()
+
+        if not cursor.rowcount: raise CustomError("Failed to delete plant", "error")
+        flash("Plant deleted successfully", "success")
+        conn.close()
+    except CustomError as e:
+        flash(e.message, e.category)
+    return redirect("/plants")
+
+
+
+@plants.get("/edit/<id>")
+def handle_plant_edit(id):
+    plant = []
+    try:
+        # CHECK CONNECTION
+        db = get_connection()
+        if not db: raise CustomError("Couldn't connect to database", "error")
+
+        conn, cursor = db
+        sql = "SELECT * FROM plants WHERE plant_id = %s"
+        cursor.execute(sql, [id])
+
+        if not cursor.rowcount: raise CustomError("Plant not found", "error")
+        plant = cursor.fetchone()
+        conn.close()
+    except CustomError as e:
+        flash(e.message, e.category)
+    return render_template("edit-plant.html", plant=plant)
+
+
+
+@plants.post("/update/<id>")
+def handle_plant_update(id):
+    plant = []
+    try:
+        # CHECK CONNECTION
+        db = get_connection()
+        if not db: raise CustomError("Couldn't connect to database", "error")
+        conn, cursor = db
+
+        # GET PLANT DETAILS
+        data = request.form
+        plant_name = data.get('name')
+        category = data.get('category')
+        quantity = data.get('quantity')
+        price = data.get('price')
+        description = data.get('description')
+        image_urls = data.get('image_urls')
+
+        files = request.files.getlist("images")
+        if files[0].filename != "":
+            # IF THERE'S NEW UPLOAD, CLEAR THE PREV ONES
+            image_urls = []
+            for file in files:
+                print("FILE:", file)
+                pub_id = generate_id()
+                result = upload_file(file, pub_id)
+                image_urls.append(result.get('secure_url'))
+            image_urls = json.dumps(image_urls)
+
+        sql = """UPDATE plants 
+            SET name = %s, description = %s, price = %s, quantity = %s, image_url = %s, category_id = %s
+            WHERE plant_id = %s"""
+        cursor.execute(sql, [plant_name, description, price, quantity, image_urls, category, id])
+        conn.commit()
+        conn.close()
+
+        if not cursor.rowcount: raise CustomError("Failed to update plant", "error")
+        flash("Plant updated", "success")
+        return redirect("/plants")
+    
+    except CustomError as e:
+        flash(e.message, e.category)
+
+    except Exception as e:
+        flash(str(e), "error")
+
+    return render_template("edit-plant.html", plant=plant)
+
+
+@plants.post("/plants/create/bulk")
+def handle_create_bluk():
+    try:
+        # GET UPLOADED FILES
+        file = request.files.get("file")
+        if not file.filename: raise CustomError("File not found")
+        data = []
+
+        reader = csv.reader(file)
+        for row in reader:
+            data.append(row)
+
+        return data
+    except Exception as e:
+        # flash(str(e), "error")
+        return { 'success': True }
