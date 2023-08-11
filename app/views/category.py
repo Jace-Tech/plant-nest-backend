@@ -5,3 +5,8 @@ category = Blueprint("category", __name__)
 @category.get("/")
 def view_category_page():
     return render_template("category.html")
+
+
+
+
+# CREATE
