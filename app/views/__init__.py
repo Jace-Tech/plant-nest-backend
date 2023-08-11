@@ -13,8 +13,16 @@ def dashboard_page():
 from .auth  import auth
 dashboard.register_blueprint(auth)
 
-# PRODUCT ROUTES
+# PLANT ROUTES
 from .plants import plants
 dashboard.register_blueprint(plants, url_prefix="/plants")
+
+# ACCESSORY ROUTES
+from .accessory import accessory
+dashboard.register_blueprint(accessory, url_prefix="/accessories")
+
+# CATEGORY ROUTES
+from .category import category
+dashboard.register_blueprint(category, url_prefix="/categories")
 
 
