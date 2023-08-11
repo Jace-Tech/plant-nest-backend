@@ -1,55 +1,57 @@
-
 {% set alert_messages = get_flashed_messages(with_categories=true) %}
 {% if alert_messages|length %}
-  <style>
-    .custom-alert {
-      z-index: 100;
-      top: 50px;
-      right: 1.5rem;
-    }
+<style>
+  .alert-container {
+    position: fixed;
+    z-index: 100;
+    top: 50px;
+    right: 1.5rem;
+  }
 
-    .alert-text {
-      font-size: .85rem;
-    }
-  </style>
+  .alert-text {
+    font-size: .85rem;
+  }
+</style>
 
-  {# ALERT MACRO #}
-  {% macro show_alert(message, type) %}
-    {% set 
-      type_map = { 
-        "error": "danger", 
-        "success": "success", 
-        "warning": "warning", 
-        "info": "info" 
-      }
-    %}
+{# ALERT MACRO #}
+{% macro show_alert(message, type) %}
+{% set
+type_map = {
+"error": "danger",
+"success": "success",
+"warning": "warning",
+"info": "info"
+}
+%}
 
-    <div data-alert class="custom-alert alert alert-{{ type_map[type] }} p-3 w-full position-fixed " role="alert">
-      <div class="d-flex align-items-center">
-        <div class="mr-3">
-          <i class="fas fa-info-circle"></i>
-        </div>
-        <div class="alert-text">{{ message }}</div>
-        <button class="close-btn btn" style="box-shadow: none;">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
+<div data-alert class="custom-alert alert alert-{{ type_map[type] }} p-3" role="alert">
+  <div class="d-flex align-items-center">
+    <div class="mr-3">
+      <i class="fas fa-info-circle"></i>
     </div>
-  {% endmacro %}
+    <div class="alert-text">{{ message }}</div>
+    <button class="close-btn btn" style="box-shadow: none;">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+</div>
+{% endmacro %}
 
 
-  {# LOOP AND DISPLAY RESULT #}
-  {% for alert in alert_messages %}
-    {{ alert  }}
+{# LOOP AND DISPLAY RESULT #}
+<div class="alert-container">
+  {% for category, message in alert_messages %}
+  {{ show_alert(message, category) }}
   {% endfor %}
+</div>
 
-  <script>
-    const alerts = document.querySelectorAll("[data-alert]")
-    const closeBtns = document.querySelectorAll(".close-btn")
-    closeBtns.forEach((btn, index) => {
-      btn.addEventListener("click", () => {
-        alerts[index].remove()
-      })
+<script>
+  const alerts = document.querySelectorAll("[data-alert]")
+  const closeBtns = document.querySelectorAll(".close-btn")
+  closeBtns.forEach((btn, index) => {
+    btn.addEventListener("click", () => {
+      alerts[index].remove()
     })
-  </script>
+  })
+</script>
 {% endif %}
