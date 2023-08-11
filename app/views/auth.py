@@ -23,6 +23,7 @@ def signup_page():
     return render_template("signup.html")
 
 
+
 @auth.post('/signup')
 def handle_admin_sign_page():
     data = request.form
@@ -48,8 +49,5 @@ def handle_admin_sign_page():
     session["admin"] = True
     session["admin_id"] = admin_id  # Store the admin's ID in the session
 
-    # Create a JWT token for the admin
-    token = create_access_token(identity=admin_id)
-
     # Redirect the admin to the dashboard
-    return redirect("login_page")
+    return response("Admin account created successfully")

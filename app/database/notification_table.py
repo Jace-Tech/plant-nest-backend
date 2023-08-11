@@ -19,3 +19,16 @@ def create_notification_table():
     connection.commit()
     print("TABLE CREATED!")
     connection.close()
+
+def create_notification(title, message, user_id):
+    db = get_connection()
+
+    if not db: return
+
+    connection, cursor = db
+    sql = "INSERT INTO notifications (notification_id, title, content, user_id) VALUES (%s, %s, %s, %s)"
+
+    cursor.execute(sql, ())
+    connection.commit()
+    print("TABLE CREATED!")
+    connection.close()

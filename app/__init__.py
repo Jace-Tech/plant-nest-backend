@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, url_for, render_template
 from .migrate import run_migrations
-from flask_jwt_extended import  JWTManager
+from flask_jwt_extended import JWTManager
+
 from .utils.helpers import response
 from .utils.variables import APP_NAME, MAIL_SERVER, MAIL_PASSWORD, MAIL_PORT, APP_SECRET, MAIL_USERNAME, JWT_SECRET
 
