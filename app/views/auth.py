@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, session, redirect, url_for, reques
 from functools import wraps
 import uuid
 import bcrypt
-from ..utils.admin_manager import admin_manager
 from flask_jwt_extended import create_access_token
 from ..database import get_connection
 from ..utils.helpers import response
@@ -45,10 +44,12 @@ def handle_admin_sign_page():
     cursor.execute(sql, (admin_id, fullname, image, email, hashed_password))
     connection.commit()
 
-    # Login the user immediately
-    sql = "SELECT admin_id FROM admins WHERE email = %s"
-    cursor.execute(sql, (email,))
-    admin = cursor.fetchone()
-    token = create_access_token(identity=admin['user_id'])
-    admin_manager.add_admin(admin['username', admin['password']])
-    return redirect('login_page')
+    # Log the user in immediately after signup
+    session["admin"] = True
+    session["admin_id"] = admin_id  # Store the admin's ID in the session
+
+    # Create a JWT token for the admin
+    token = create_access_token(identity=admin_id)
+
+    # Redirect the admin to the dashboard
+    return redirect("login_page")
