@@ -2,12 +2,11 @@ from flask import Blueprint, request, jsonify
 from utils.helpers import select_product,select_product,insert_item,remove_product,products_by_user,response
 from app import app
 
+from ..utils.helpers import select_product,response,select_product,insert_item,remove_product,products_by_user
 from ..database import get_connection
 
 wishlist = Blueprint("wishlist", __name__)
-
 connection, cursor = get_connection()
-
 tableName = "wishlist_items"
 
 
@@ -51,8 +50,8 @@ def remove_from_wishlist():
     product =  request.json()
     status = remove_product(product,cursor,tableName)
     if status == True:
-            return response(f"Item removed from the wishlist successfully")
+        return response(f"Item removed from the wishlist successfully")
     else:
-            return response('Product not found in the user\'s wishlist.',status,success=False), 404
+        return response('Product not found in the user\'s wishlist.',status,success=False), 404
    
 

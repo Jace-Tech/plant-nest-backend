@@ -1,0 +1,56 @@
+{% set title = "Plant" %}
+{% extends "_layout.html" %}
+
+{# IMPORT MACROS #}
+{% include "macros/plant_macro.html" %}
+
+{% block content %}
+<div class="card shadow mb-4">
+  <div class="card-header d-flex align-items-center justify-content-between py-3">
+    <h6 class="m-0 font-weight-bold text-primary">All Plants</h6>
+    <a href="" class="btn btn-sm btn-primary">Add plant</a>
+  </div>
+  {% if plants|length %}
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Plant ID</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Description</th>
+              <th>Quantity</th>
+              <th>Availability</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>Plant ID</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Description</th>
+              <th>Quantity</th>
+              <th>Availability</th>
+              <th></th>
+            </tr>
+          </tfoot>
+          <tbody>
+            {# PRINT PLANT ROWS #}
+            {% for plant in plants %}
+              {{ plant_row(plant) }}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% else %}
+    <div class="text-center py-5 ">
+      {# TODO: ADD EMPTY ILLUSTRATION #}
+      <p class="text-muted text-center mb-1">No plant available</p>
+      <a href="/plants/create" class="text-primary text-sm">Add plant</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

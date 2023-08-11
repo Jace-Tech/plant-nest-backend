@@ -5,7 +5,6 @@ from app.database import get_connection
 import bcrypt
 
 user = Blueprint("user", __name__)
-
 connection, cursor = get_connection()
 
 
@@ -20,7 +19,6 @@ def login_required(view_func):
             return view_func(*args, **kwargs)
         except Exception as e:
             return jsonify({"message": "Unauthorized"}), 401
-
     return wrapper
 
 
@@ -58,7 +56,6 @@ def change_password():
 @user.put('/change-password')
 @jwt_required()
 def handle_change_password():
-
     current_user_id = get_jwt_identity()
 
     data = request.get_json()
