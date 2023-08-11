@@ -30,7 +30,7 @@
       <div class="col-sm-12 col-md-6 mb-3">
         <div class="form-label text-sm mb-1">Category</div>
         <select name="category" class="form-control">
-          <option value="">Select Category</option>
+          <option value="" selected disabled>Select Category</option>
           {% for category in categories %}
           <option value="{{ category.category_id }}">{{ category.name }}</option>
           {% endfor %}
@@ -44,7 +44,7 @@
 
       <div class="col-sm-12 col-md-6 mb-3">
         <div class="form-label text-sm mb-1">Quantity</div>
-        <input type="number" name="price" inputmode="numeric" class="form-control">
+        <input type="number" name="quantity" inputmode="numeric" class="form-control">
       </div>
 
 

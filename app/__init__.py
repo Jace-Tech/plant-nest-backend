@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, render_template
 from flask_jwt_extended import  JWTManager
 from .utils.helpers import response
 from .utils.variables import APP_NAME, MAIL_SERVER, MAIL_PASSWORD, MAIL_PORT, APP_SECRET, MAIL_USERNAME, JWT_SECRET
@@ -28,9 +28,9 @@ def create_app():
   
   # TODO: REMEMBER TO FIX THIS
   from .views.auth import auth
-    from app.apis.user import user
-    app.register_blueprint(auth)
-    app.register_blueprint(user)
+  from app.apis.user import user
+  app.register_blueprint(auth)
+  app.register_blueprint(user)
 
   # API ENDPOINT
   from .apis import api
@@ -40,18 +40,22 @@ def create_app():
   # ERROR ROUTES
   @app.errorhandler(404)
   def invalid_route(error):
+    print("ERROR 404:", error)
     url = request.url
-    
     # RETURN A JSON RESPONSE FOR API REQUESTS 
     if "/api/v1" in url: return response("Invalid route", None, False)
 
-    # REDIRECT 
+    # REDIRECT
     return render_template("404.html", APP_NAME=APP_NAME)
   
   
   @app.errorhandler(Exception)
   def server_error(error):
-    print("ERROR:", error)
-    return response("Something went wrong, please try again", None, False)
+    print("ERROR 500:", error)
+    url = request.url
+    if "/api/v1" in url: return response(str(error), None, False)
+
+    # REDIRECT
+    return render_template("500.html")
 
   return app

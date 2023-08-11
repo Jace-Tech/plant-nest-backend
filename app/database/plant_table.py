@@ -25,6 +25,8 @@ def create_plant_table():
 
 
 def get_all_plants():
+  "Returns all the plants, togther with the category"
+
   db = get_connection()
   if not db: return
   _, cursor = db
@@ -36,3 +38,17 @@ def get_all_plants():
 
   cursor.execute(sql)
   return cursor.fetchall()
+
+
+def get_one_plant(id):
+  db = get_connection()
+  if not db: return
+  _, cursor = db
+  sql = """
+    SELECT P.*, C.name AS category_name 
+    FROM plants AS P 
+    INNER JOIN categories AS C 
+    ON P.category_id = C.category_id WHERE plant_id = %s"""
+
+  cursor.execute(sql, [id])
+  return cursor.fetchone()

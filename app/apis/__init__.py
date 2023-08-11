@@ -14,7 +14,5 @@ def default_api():
 
 # TODO: REMEMBER TO MOVE THIS
 api.register_blueprint(user, url_prefix="/user")
-
 api.register_blueprint(cart, url_prefix="/cart")
-
 api.register_blueprint(wishlist, url_prefix="/wishlist")

@@ -1,20 +1,15 @@
 from flask import Blueprint, request, jsonify
-from utils.helpers import select_product,response,select_product,insert_item,remove_product,products_by_user
-from app import app
-
+from ..utils.helpers import select_product,response,select_product,insert_item,remove_product,products_by_user
 from ..database import get_connection
 
 wishlist = Blueprint("wishlist", __name__)
-
 connection, cursor = get_connection()
-
 tableName = "wishlist_items"
 
 
 @wishlist.get('/add')
 def add_to_wishlist(cursor):
-    product =  request.get_json()
-    
+    product =  request.get_json()   
     status = insert_item(product,cursor,tableName); 
     
     if status == True:

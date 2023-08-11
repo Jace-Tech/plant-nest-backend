@@ -2,18 +2,15 @@
 
   <!-- Sidebar - Brand -->
   <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-    <div class="sidebar-brand-icon rotate-n-15">
-      <i class="fas fa-laugh-wink"></i>
-    </div>
-    <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+    <div class="sidebar-brand-text">Plantnest <span class="font-weight-light">Admin</span></div>
   </a>
 
   <!-- Divider -->
   <hr class="sidebar-divider my-0">
 
   <!-- Nav Item - Dashboard -->
-  <li class="nav-item">
-    <a class="nav-link" href="/">
+  <li class="nav-item {% if title|lower == 'dashboard' %} {{ 'active' }} {% endif %}">
+    <a class="nav-link" href="/dashboard">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Dashboard</span></a>
   </li>
@@ -27,35 +24,67 @@
   </div>
 
   <!-- Nav Item - Plants -->
-  <li class="nav-item">
+  <li class="nav-item {% if title|lower == 'category' %} {{ 'active' }} {% endif %}">
+    <a class="nav-link " href="/categories" aria-expanded="true"
+      aria-controls="plants">
+      <i class="fas fa-fw fa-list"></i>
+      <span>Categories</span>
+    </a>
+  </li>
+
+  <!-- Nav Item - Plants -->
+  <li class="nav-item {% if title|lower == 'plant' %} {{ 'active' }} {% endif %}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#plants" aria-expanded="true"
       aria-controls="plants">
-      <i class="fas fa-fw fa-cog"></i>
+      <i class="fas fa-fw fa-seedling"></i>
       <span>Plants</span>
     </a>
     <div id="plants" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item" href="">Add plant</a>
-        <a class="collapse-item" href="">View plants</a>
+        <a class="collapse-item" href="/plants/create">Add plant</a>
+        <a class="collapse-item" href="/plants">View plants</a>
       </div>
     </div>
   </li>
 
   <!-- Nav Item - Accessories -->
-  <li class="nav-item">
+  <li class="nav-item {% if title|lower == 'accessory' %} {{ 'active' }} {% endif %}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#accessories" aria-expanded="true"
       aria-controls="accessories">
-      <i class="fas fa-fw fa-cog"></i>
+      <i class="fas fa-fw fa-toolbox"></i>
       <span>Accessories</span>
     </a>
     <div id="accessories" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item" href="">Add accessory</a>
-        <a class="collapse-item" href="">View accessories  </a>
+        <a class="collapse-item" href="/accessories/create">Add accessory</a>
+        <a class="collapse-item" href="/accessories">View accessories  </a>
       </div>
     </div>
   </li>
 
+  <!-- Divider -->
+  <hr class="sidebar-divider">
+
+  <!-- Heading -->
+  <div class="sidebar-heading">users</div>
+
+  <!-- Nav Item - Customers -->
+  <li class="nav-item {% if title|lower == 'customer' %} {{ 'active' }} {% endif %}">
+    <a class="nav-link collapsed" href="/customers" aria-expanded="true"
+      aria-controls="plants">
+      <i class="fas fa-fw fa-users"></i>
+      <span>Customers</span>
+    </a>
+  </li>
+
+  <!-- Nav Item - Orders -->
+  <li class="nav-item {% if title|lower == 'order' %} {{ 'active' }} {% endif %}">
+    <a class="nav-link collapsed" href="/orders" aria-expanded="true"
+      aria-controls="plants">
+      <i class="fas fa-fw fa-money-bill-wave"></i>
+      <span>Orders</span>
+    </a>
+  </li>
 
 
   <!-- Divider -->
