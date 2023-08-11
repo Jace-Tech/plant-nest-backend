@@ -7,13 +7,13 @@ from ..database.category_table import get_all_categories
 from ..utils.errors import CustomError
 from ..utils.helpers import generate_id
 from ..utils.uploader import upload_file
+from ..utils.decorators import admin_required
 from datetime import datetime
 
 plants = Blueprint("plants", __name__)
 
-
 @plants.get("/")
-# TODO: PREVENT UNAUTHORIZED ACCESS
+@admin_required
 def view_plant_page():
     all_plants = None
     try:
@@ -30,9 +30,8 @@ def view_plant_page():
         return render_template("plants.html", plants=all_plants)
 
 
-
 @plants.get("/create")
-# TODO: PREVENT UNAUTHORIZED ACCESS
+@admin_required
 def view_plant_create_page():
     all_categories = None
 
@@ -51,9 +50,8 @@ def view_plant_create_page():
         return render_template("plant-create.html", categories=all_categories)
 
 
-
 @plants.post("/create")
-# TODO: PREVENT UNAUTHORIZED ACCESS
+@admin_required
 def handle_plant_create():
     try:
         data = request.form
@@ -102,8 +100,8 @@ def handle_plant_create():
     return render_template("plant-create.html", categories=all_categories)
 
 
-
 @plants.get("/delete/<id>")
+@admin_required
 def handle_plant_delete(id):
     try:
         # CHECK CONNECTION
@@ -126,6 +124,7 @@ def handle_plant_delete(id):
 
 
 @plants.get("/edit/<id>")
+@admin_required
 def handle_plant_edit(id):
     plant = []
     try:
@@ -145,8 +144,8 @@ def handle_plant_edit(id):
     return render_template("edit-plant.html", plant=plant)
 
 
-
 @plants.post("/update/<id>")
+@admin_required
 def handle_plant_update(id):
     plant = []
     try:
@@ -193,6 +192,7 @@ def handle_plant_update(id):
         flash(str(e), "error")
 
     return render_template("edit-plant.html", plant=plant)
+
 
 
 @plants.post("/plants/create/bulk")

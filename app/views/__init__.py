@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template
 from ..database.plant_table import get_all_plants
+from ..utils.decorators import admin_required
 
 dashboard = Blueprint("dashboard", __name__)
 
 # ALL ADMIN ROUTES
 @dashboard.get("/dashboard")
+@admin_required
 def dashboard_page():
     plants = get_all_plants()
     return render_template('dashboard.html', plants=plants)
