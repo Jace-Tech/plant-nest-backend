@@ -46,8 +46,8 @@ def remove_from_wishlist():
     product =  request.get_json()
     status = remove_product(product,cursor,tableName)
     if status == True:
-            return response(f"Item removed from the wishlist successfully")
+        return response(f"Item removed from the wishlist successfully")
     else:
-            return response('Product not found in the user\'s wishlist.',status,success=False), 404
+        return response('Product not found in the user\'s wishlist.',status,success=False), 404
    
 

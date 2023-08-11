@@ -5,7 +5,8 @@ from .database.category_table import create_category_table
 
 
 # RUN MIGRATIONS
-create_category_table()
-create_user_table()
-create_admin_table()
-create_plant_table()
+def run_migrations():
+    create_category_table()
+    create_user_table()
+    create_admin_table()
+    create_plant_table()
