@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
-from ..utils.helpers import select_product,response,select_product,insert_item,remove_product,products_by_user
+from ..utils.helpers import response
+from ..database.general_functions import select_product,select_product,insert_item,remove_product,products_by_user
 from ..database import get_connection
 
 wishlist = Blueprint("wishlist", __name__)
@@ -7,9 +8,10 @@ connection, cursor = get_connection()
 tableName = "wishlist_items"
 
 
-@wishlist.get('/add')
+@wishlist.get('/add',methods=['POST'])
 def add_to_wishlist(cursor):
-    product =  request.get_json()   
+    product =  request.json()
+    
     status = insert_item(product,cursor,tableName); 
     
     if status == True:
@@ -18,7 +20,7 @@ def add_to_wishlist(cursor):
     return response('Item was not added to the wishlist successfully.', success=False)
     
     
-@wishlist.get('/<user_id>')
+@wishlist.get('/<user_id>',methods=['GET'])
 def get_wishlist_contents(user_id):
     
     try:
@@ -41,9 +43,9 @@ def get_wishlist_contents(user_id):
         return response('An error occurred.', success=False)
 
 
-@wishlist.get('/remove')
+@wishlist.get('/remove',methods=['POST'])
 def remove_from_wishlist():
-    product =  request.get_json()
+    product =  request.json()
     status = remove_product(product,cursor,tableName)
     if status == True:
         return response(f"Item removed from the wishlist successfully")
