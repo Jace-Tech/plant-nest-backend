@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from ..utils.helpers import response
-from app import app
+
 from ..database import get_connection
 from ..database.general_functions import select_product,select_product,insert_item,remove_product,products_by_user
 
