@@ -6,8 +6,8 @@ dashboard = Blueprint("dashboard", __name__)
 # ALL ADMIN ROUTES
 @dashboard.get("/dashboard")
 def dashboard_page():
-  plants = get_all_plants()
-  return render_template('dashboard.html', plants=plants)
+    plants = get_all_plants()
+    return render_template('dashboard.html', plants=plants)
 
 # AUTH ROUTES
 from .auth  import auth
