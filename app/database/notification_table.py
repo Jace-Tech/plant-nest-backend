@@ -1,4 +1,5 @@
 from . import get_connection
+from ..utils.helpers import generate_id
 
 def create_notification_table():
     db = get_connection()
@@ -21,14 +22,20 @@ def create_notification_table():
     connection.close()
 
 def create_notification(title, message, user_id):
-    db = get_connection()
+    try:
+        db = get_connection()
 
-    if not db: return
+        if not db: return
 
-    connection, cursor = db
-    sql = "INSERT INTO notifications (notification_id, title, content, user_id) VALUES (%s, %s, %s, %s)"
+        connection, cursor = db
+        sql = "INSERT INTO notifications (notification_id, title, content, user_id) VALUES (%s, %s, %s, %s)"
 
-    cursor.execute(sql, ())
-    connection.commit()
-    print("TABLE CREATED!")
-    connection.close()
+        cursor.execute(sql, (generate_id(), title, message, user_id))
+        connection.commit()
+        if not cursor.rowcount:
+            raise Exception("Error occurred.")
+        connection.close()
+        return True
+    except Exception as e:
+        print(e)
+        return None

@@ -7,6 +7,7 @@ from ..utils.helpers import response
 from ..utils.errors import CustomRequestError
 from ..utils.mailer import send_mail
 from ..utils.variables import APP_LOGO, APP_URL
+from ..database.notification_table import create_notification
 
 auth = Blueprint("auth", __name__)
 app = current_app
@@ -73,7 +74,7 @@ def handle_signup_page():
     print("Passed 6")
 
     # NOTIFY THE ADMIN A NEW USER WAS CREATED
-
+    create_notification("New user", "A new user just joined", "ADMIN")
 
     # LOGIN IN THE USER IMMEDIATELY AFTER REGISTRATION
     sql = "SELECT user_id FROM users WHERE email = %s"
