@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
 from ..utils.helpers import select_product,response,select_product,insert_item,remove_product,products_by_user
-from app import app
 from ..database import get_connection
 
 cart = Blueprint("cart", __name__)

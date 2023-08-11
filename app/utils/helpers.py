@@ -1,13 +1,15 @@
 from functools import wraps
-from datetime import datetime
+from random import randint
 
 def response(msg: str, data=None, success=True):
 	return { "message": msg, "data": data, "success": success }
 
 
-def generate_id(prefix: str = "id_"):
-	timestamp = datetime.now().timestamp()
-	return prefix + str(timestamp)
+def generate_id(prefix: str = "id_", length=8):
+	id = ""
+	for i in range(length):
+		id += str(randint(0, 9))
+	return prefix + id
 
 
 # TODO: MOVE ALL THESE FUNCTIONS TO THE DATABASE FOLDER INSIDE THE APPROPRIATE FILE
