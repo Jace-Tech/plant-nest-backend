@@ -25,7 +25,7 @@ def get_admin():
     if not db: return
 
     conn, cursor = db
-    sql = "SELECT * admins"
+    sql = "SELECT * FROM admins"
     cursor.execute(sql)
     admin = cursor.fetchone()
     conn.close()

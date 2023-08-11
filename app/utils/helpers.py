@@ -12,6 +12,23 @@ def generate_id(prefix: str = "id_", length=8):
 	return prefix + id
 
 
+def map_func(seq, func):
+	"Emulates Javascript's map array method"
+	res = []
+	for index, item in enumerate(seq):
+		res.append(func(item, index, seq))
+	return res
+
+
+def filter_func(seq, func):
+	"Emulates Javascript's filter array method"
+	res = []
+	for index, item in enumerate(seq):
+		if func(item, index, seq):
+			res.append(item)
+	return res
+
+
 # TODO: MOVE ALL THESE FUNCTIONS TO THE DATABASE FOLDER INSIDE THE APPROPRIATE FILE
 def select_product(product_id,cursor):
 	try:
