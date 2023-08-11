@@ -58,7 +58,7 @@ def handle_plant_create():
         data = request.form
 
         plant_id = generate_id("pln_")
-        plant_name = (data.get('name'))
+        plant_name = data.get('name')
         category = data.get('category')
         quantity = data.get('quantity')
         price = data.get('price')
@@ -66,16 +66,15 @@ def handle_plant_create():
         image_urls = []
 
         # HANDLE IMAGES
-        files = request.files.getlist('images')
+        files = request.files.getlist("images")
+
         for file in files:
-            timestamp = datetime.now().timestamp().__str__()
-            filename = timestamp + "-" + file.get('filename')
-            result = upload_file(file, filename)
+            print("FILE:", file)
+            pub_id = generate_id()
+            result = upload_file(file, pub_id)
             image_urls.append(result.get('secure_url'))
-            print("ADDED:", result.get('secure_url'))
 
         # CONVERT TO JSON
-        print("IMAGES:", image_urls)
         image_urls = json.dumps(image_urls)
 
         db = get_connection()
