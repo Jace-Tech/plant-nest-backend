@@ -1,8 +1,6 @@
 from flask import Blueprint, request, jsonify
-from utils.helpers import select_product,select_product,insert_item,remove_product,products_by_user,response
-from app import app
-
-from ..utils.helpers import select_product,response,select_product,insert_item,remove_product,products_by_user
+from ..utils.helpers import response
+from ..database.general_functions import select_product,select_product,insert_item,remove_product,products_by_user
 from ..database import get_connection
 
 wishlist = Blueprint("wishlist", __name__)

@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
-from utils.helpers import insert_review,fetch_product_review,response
+from ..utils.helpers import response
+from ..database.general_functions import insert_review,fetch_product_review
 from app import app
 
 from ..database import get_connection
