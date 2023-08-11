@@ -106,3 +106,19 @@ def insert_review(review, cursor):
         return True  
     except Exception as e:
         return str(e)
+
+def fetch_product_review(product_id, cursor):
+    try:
+        
+        query = "SELECT AVG(rating) AS average_rating FROM reviews WHERE product_id = %s"
+        cursor.execute(query, (product_id,))
+
+     
+        result = cursor.fetchone()
+
+        if result and result['average_rating'] is not None:
+            return result['average_rating']
+        else:
+            return "Product not found or no reviews available."
+    except Exception as e:
+        return str(e)
