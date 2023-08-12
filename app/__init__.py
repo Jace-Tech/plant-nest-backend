@@ -11,7 +11,7 @@ def create_app():
 	app = Flask(__name__)
 	api = Api(app, "Test")
 	jwt = JWTManager(app)
-	CORS(app, resources={r"/api/*": {"origins": "*"}})
+	CORS(app, origins="*")
 
 	# RUN MIGRATIONS
 	run_migrations()
