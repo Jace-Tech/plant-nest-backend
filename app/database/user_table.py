@@ -19,3 +19,30 @@ def create_user_table():
 	connection.commit()
 	print("TABLE CREATED!")
 	connection.close()
+
+
+
+def get_all_users():
+	"""Returns all the users"""
+
+	db = get_connection()
+	if not db: return
+	_, cursor = db
+	sql = "SELECT * FROM users"
+
+	cursor.execute(sql)
+	return cursor.fetchall()
+
+
+
+def get_one_user(id):
+	"""Returns one user"""
+
+	db = get_connection()
+	if not db: return
+	_, cursor = db
+	sql = "SELECT * FROM users WHERE user_id = %s"
+
+	cursor.execute(sql, [id])
+	return cursor.fetchone()
+

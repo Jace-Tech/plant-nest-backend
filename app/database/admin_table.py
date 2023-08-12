@@ -18,3 +18,16 @@ def create_admin_table():
     connection.commit()
     print("TABLE CREATED!")
     connection.close()
+
+
+def get_admin():
+    db = get_connection()
+    if not db: return
+
+    conn, cursor = db
+    sql = "SELECT * FROM admins"
+    cursor.execute(sql)
+    admin = cursor.fetchone()
+    conn.close()
+    return admin
+

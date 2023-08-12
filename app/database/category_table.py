@@ -24,3 +24,12 @@ def get_all_categories():
 	sql = "SELECT * FROM categories"
 	cursor.execute(sql)
 	return cursor.fetchall()
+
+
+def get_category_by_id(id):
+	db = get_connection()
+	if not db: return
+	_, cursor = db
+	sql = "SELECT * FROM categories WHERE category_id = %s"
+	cursor.execute(sql, [id])
+	return cursor.fetchone()

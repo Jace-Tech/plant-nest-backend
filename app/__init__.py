@@ -1,12 +1,14 @@
 from flask import Flask, request, redirect, url_for, render_template
 from .migrate import run_migrations
 from flask_jwt_extended import JWTManager
+from flask_docs_api.api import Api
 from .utils.helpers import response
 from .utils.variables import APP_NAME, MAIL_SERVER, MAIL_PASSWORD, MAIL_PORT, APP_SECRET, MAIL_USERNAME, JWT_SECRET
 
 
 def create_app():
 	app = Flask(__name__)
+	api = Api(app, "Test")
 	jwt = JWTManager(app)
 
 	# RUN MIGRATIONS
@@ -26,17 +28,14 @@ def create_app():
 	app.config['MAIL_USERNAME'] = MAIL_USERNAME
 	app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
 
-	# ALL ADMIN ROUTES
+	api.route("/api-docs")
+
+	# ADMIN ROUTES
 	from .views import dashboard
 	app.register_blueprint(dashboard)
 
-	# TODO: REMEMBER TO FIX THIS
-	from .views.auth import auth
-	from app.apis.user import user
-	app.register_blueprint(auth)
-	app.register_blueprint(user)
 
-	# API ENDPOINT
+	# API ENDPOINTS
 	from .apis import api
 	app.register_blueprint(api, url_prefix="/api/v1")
 
