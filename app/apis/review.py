@@ -9,7 +9,7 @@ review = Blueprint("review", __name__)
 connection, cursor = get_connection()
 
 
-@review.post('/feedback')
+@review.post('/review')
 def submit_feedback():
     review = request.json('review')
     status = insert_review(review,cursor)

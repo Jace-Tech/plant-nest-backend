@@ -5,7 +5,7 @@ from ..database.order_table import get_all_orders, get_amount_for_period
 from ..database.plant_table import get_all_plants
 from ..database import get_connection
 from ..database.user_table import get_all_users
-from ..database.feedback_table import get_all_reviews
+from ..database.reviews_table import get_all_reviews
 
 from ..utils.decorators import admin_required
 from ..utils.errors import CustomError
