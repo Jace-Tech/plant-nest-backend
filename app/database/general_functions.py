@@ -88,8 +88,8 @@ def insert_review(review, cursor):
 		values = (review['user_id'], review['product_id'], review['rating'], review['feedback'], 'now()')
 		cursor.execute(insert_query, values)
 
-
 		return True
+
 	except Exception as e:
 		return str(e)
 
