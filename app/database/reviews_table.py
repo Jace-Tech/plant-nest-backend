@@ -1,11 +1,11 @@
 from . import get_connection
 
-def create_feedback_table():
+def create_reviews_table():
     db = get_connection()
     if not db: return
     connection, cursor = db
 
-    sql = """CREATE TABLE IF NOT EXISTS IF NOT EXISTS reviews  (
+    sql = """CREATE TABLE IF NOT EXISTS reviews (
         review_id INT PRIMARY KEY AUTO_INCREMENT,
         user_id VARCHAR(20),
         isDeleted INT NOT NULL,
@@ -20,16 +20,13 @@ def create_feedback_table():
     print("TABLE CREATED!")
     connection.close()
 
-
-
-
 def get_all_reviews():
-	"""Returns all the reviews"""
+    """Returns all the reviews"""
 
-	db = get_connection()
-	if not db: return
-	_, cursor = db
-	sql = "SELECT * FROM reviews"
+    db = get_connection()
+    if not db: return
+    _, cursor = db
+    sql = "SELECT * FROM reviews"
 
-	cursor.execute(sql)
-	return cursor.fetchall()
+    cursor.execute(sql)
+    return cursor.fetchall()
