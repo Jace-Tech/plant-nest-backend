@@ -11,6 +11,7 @@ def create_orders_table():
 		`user_id` VARCHAR(20),
         `firstname` VARCHAR(50),
         `lastname` VARCHAR(50),
+        `status` VARCHAR(50) DEFAULT 'pending',
         `phone` VARCHAR(15) DEFAULT NULL,
         `email` VARCHAR(100) DEFAULT NULL,
 		`products` VARCHAR(255) NOT NULL,
@@ -35,6 +36,7 @@ def get_all_orders():
 
 	cursor.execute(sql)
 	return cursor.fetchall()
+
 
 def get_users_order(user_id):
 	"""Returns user's order"""

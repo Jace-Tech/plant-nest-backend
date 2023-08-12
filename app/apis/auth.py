@@ -8,7 +8,7 @@ from ..utils.errors import CustomRequestError, catch_exception
 from ..utils.mailer import send_mail
 from ..utils.variables import APP_LOGO, APP_URL
 from ..database.notification_table import create_notification
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 
 auth = Blueprint("auth", __name__)
@@ -65,8 +65,9 @@ def handle_signup_page():
     # INSERT THE USER INTO THE TABLE
     user_id = str(uuid.uuid4())[:20]
     hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     sql = "INSERT INTO users (user_id, fullname, username, contact_number, email, password, date) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-    cursor.execute(sql, (user_id, fullname, username, contact_number, email, hashed_password, 'now()'))
+    cursor.execute(sql, (user_id, fullname, username, contact_number, email, hashed_password, now))
     connection.commit()
 
     # SEND EMAIL
