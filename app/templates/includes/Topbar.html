@@ -12,32 +12,32 @@
       <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-bell fa-fw"></i>
-        <!-- Counter - Alerts -->
         {% if  session.unread_notifications|length %}
           <span class="badge badge-danger badge-counter">{{ session.unread_notifications|length }}+</span>
         {% endif %}
       </a>
-      <!-- Dropdown - Alerts -->
       <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
         aria-labelledby="alertsDropdown">
-        <h6 class="dropdown-header">
-          Alerts Center
-        </h6>
+        <h6 class="dropdown-header"> Notifications </h6>
+
+        {# SHOW MESSAGE IF NO NOTIFICATION IS FOUND #}
+        {% if not session.notifications|length %} <p class="mb-0 p-3 text-muted">No notifications</p> {%  endif %}
+
+        {# SHOW ALL NOTIFICATIONS #}
         {% for notification in session.unread_notifications %}
           <a class="dropdown-item d-flex align-items-center" href="/notification/{{ notification.notification_id }}">
             <div>
-              {# <div class="small text-gray-500"></div> #}
               <p class="font-weight-bold mb-1">{{ notification.title }}</p>
               <span class="font-weight-light">{{ notification.content }}</span>
             </div>
           </a>
         {% endfor %}
+
         {% if session.read_notifications|length %}
           <p class="text-xs font-weight-bold p-2 m-0" style="color: #cacaca">Read Notifications</p>
           {% for notification in session.read_notifications %}
             <a class="dropdown-item d-flex align-items-center" href="#">
               <div>
-                {# <div class="small text-gray-500"></div> #}
                 <p class="font-weight-bold mb-1">{{ notification.title }}</p>
                 <span class="font-weight-light">{{ notification.content }}</span>
               </div>
@@ -47,18 +47,14 @@
       </div>
     </li>
 
-    <!-- Nav Item - Messages -->
-
     <div class="topbar-divider d-none d-sm-block"></div>
 
-    <!-- Nav Item - User Information -->
     <li class="nav-item dropdown no-arrow">
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ session.admin.name }}</span>
         <img class="img-profile rounded-circle border border-dark" src="{{ session.admin.image }}">
       </a>
-      <!-- Dropdown - User Information -->
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
         <a class="dropdown-item text-danger" href="/logout">
           <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>

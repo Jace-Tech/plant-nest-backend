@@ -12,10 +12,9 @@ def create_plant_table():
 		`description` TEXT,
 		`price` FLOAT,
 		`quantity` INT,
-		`image_url` VARCHAR(200),
+		`image_url` LONGTEXT,
 		`is_available` TINYINT DEFAULT 1,
-		`category_id` VARCHAR(20),
-		FOREIGN KEY (`category_id`) REFERENCES categories(`category_id`)
+		`category_id` VARCHAR(20)
 	)"""
 
 	cursor.execute(sql)

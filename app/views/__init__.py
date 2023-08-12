@@ -1,8 +1,17 @@
 from flask import Blueprint, render_template, request, redirect, flash
+
+from ..database.accessory_table import get_all_accessories
+from ..database.order_table import get_all_orders, get_amount_for_period
 from ..database.plant_table import get_all_plants
 from ..database import get_connection
+from ..database.user_table import get_all_users
+from ..database.feedback_table import get_all_reviews
+
 from ..utils.decorators import admin_required
 from ..utils.errors import CustomError
+from ..utils.helpers import map_func
+
+import json
 
 dashboard = Blueprint("dashboard", __name__)
 
@@ -10,10 +19,28 @@ dashboard = Blueprint("dashboard", __name__)
 @dashboard.get("/dashboard")
 @admin_required
 def dashboard_page():
+    users = get_all_users()
+    accessories = get_all_accessories()
+    orders = get_all_orders()
+    reviews = get_all_reviews()
     plants = get_all_plants()
-    return render_template('dashboard.html', plants=plants)
+
+    daily = json.dumps(map_func(get_amount_for_period("daily"), lambda item, *_ : float(item['revenue'])))
+    monthly = json.dumps(map_func(get_amount_for_period("monthly"), lambda item, *_ : float(item['revenue'])))
 
 
+    return render_template('dashboard.html', 
+        plants=plants,
+        users=users,
+        accessories=accessories,
+        orders=orders,
+        reviews=reviews,
+        daily=daily,
+        monthly=monthly
+    )
+
+
+# MARK NOTIFICATION AS READ
 @dashboard.get("/notification/<id>")
 @admin_required
 def mark_notification_read(id):

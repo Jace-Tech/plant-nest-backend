@@ -23,6 +23,7 @@ def admin_required(view_func):
             # GET NOTIFICATION
             notifications = get_notification(session.get('admin')['admin_id'])
             notifications = get_notification(session.get('admin')['admin_id'])
+            session['notifications'] = notifications
             session['unread_notifications'] = filter_func(notifications, lambda item, *rest: item.get('is_seen') == 0)
             session['read_notifications'] = filter_func(notifications, lambda item, *rest: item.get('is_seen') == 1)
 

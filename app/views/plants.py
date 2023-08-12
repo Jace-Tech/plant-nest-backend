@@ -8,7 +8,6 @@ from ..utils.errors import CustomError
 from ..utils.helpers import generate_id
 from ..utils.uploader import upload_file
 from ..utils.decorators import admin_required
-from datetime import datetime
 
 plants = Blueprint("plants", __name__)
 
@@ -127,10 +126,12 @@ def handle_plant_delete(id):
 @admin_required
 def handle_plant_edit(id):
     plant = []
+    categories = []
     try:
         # CHECK CONNECTION
         db = get_connection()
         if not db: raise CustomError("Couldn't connect to database", "error")
+        categories = get_all_categories()
 
         conn, cursor = db
         sql = "SELECT * FROM plants WHERE plant_id = %s"
@@ -141,7 +142,7 @@ def handle_plant_edit(id):
         conn.close()
     except CustomError as e:
         flash(e.message, e.category)
-    return render_template("edit-plant.html", plant=plant)
+    return render_template("edit-plant.html", plant=plant, categories=categories)
 
 
 @plants.post("/update/<id>")

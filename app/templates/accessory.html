@@ -1,2 +1,114 @@
 {% set title = "Accessory" %}
 {% extends "_layout.html" %}
+{# PLANT MACROS #}
+{% macro accessory_row(accessory) %}
+<tr>
+  <td style="white-space: nowrap;">{{ accessory.get('accessory_id') }}</td>
+  <td style="white-space: nowrap;">{{ accessory.get('name') }}</td>
+  <td style="white-space: nowrap;">&#8358; {{ accessory.get('price') }}</td>
+  <td style="white-space: nowrap;">{{ accessory.get('description') }}</td>
+  <td style="white-space: nowrap;">{{ accessory.get('quantity') }}</td>
+  <td style="white-space: nowrap;">{% if accessory.get('is_available')|string == 'None' %} <div class="badge badge-danger badge-sm">Not Available</div> {% else %} <div class="badge badge-success badge-sm">Available</div> {% endif %}</td>
+  <td>
+    <div class="d-flex">
+      <a href="/accessories/edit/{{ accessory.get('accessory_id') }}" class="text-sm text-primary mr-2">Edit</a>
+      <a href="/accessories/delete/{{ accessory.get('accessory_id') }}" class="text-sm text-danger">Delete</a>
+    </div>
+  </td>
+</tr>
+{% endmacro %}
+
+{% block content %}
+<div class="card shadow mb-4">
+  <div class="card-header d-flex align-items-center justify-content-between py-3">
+    <h6 class="m-0 font-weight-bold text-primary">All Accessories</h6>
+    <div class="d-flex align-items-center">
+      <a href="/accessories/create" class="btn btn-sm btn-primary mr-2">Add accessory</a>
+      <form data-upload-form action="/accessories/create/bulk" method="post" enctype="multipart/form-data">
+        <input hidden type="file" id="input" name="file" accept=".csv" />
+        <a href="" id="upload-btn" class="btn btn-sm btn-secondary btn-icon-split">
+          <span class="icon text-white-50">
+            <i class="fas fa-upload"></i>
+          </span>
+          <span class="text">Upload CSV</span>
+        </a>
+      </form>
+    </div>
+  </div>
+  {% if accessories|length %}
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Accessory ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Availability</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>Accessory ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Availability</th>
+            <th></th>
+          </tr>
+        </tfoot>
+        <tbody>
+          {# PRINT PLANT ROWS #}
+          {% for accessory in accessories %}
+            {{ accessory_row(accessory) }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="text-center py-5 ">
+    <img src="/static/svgs/empty.svg" width="100" class="mx-auto img-fluid mb-5" />
+    <p class="text-muted text-center mb-1">No accessory available</p>
+    <a href="/accessories/create" class="text-primary text-sm">Add accessory</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Page level plugins -->
+    <script src="/static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $('#dataTable').DataTable();
+  });
+  
+  const uploadForm = document.querySelector("[data-upload-form]")
+  const uploadBtn = document.querySelector("#upload-btn")
+  const inputElem = document.querySelector("#input")
+
+  uploadBtn.addEventListener("click", (e) => {
+    e.preventDefault()
+    inputElem.click()
+  })
+
+  inputElem.addEventListener("change", async () => {
+    if(!inputElem.files[0]) return 
+
+    const formData = new FormData()
+    formData.append("file", inputElem.files[0])
+
+    fetch("http://localhost:4000/accessories/create/bulk", { method: "POST", data: formData })
+    .then((req) => req.text())
+    .then((res) => console.log(res))
+    .catch(err => console.log(err))
+  })
+</script>
+{% endblock %}

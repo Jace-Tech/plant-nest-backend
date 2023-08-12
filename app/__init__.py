@@ -30,17 +30,12 @@ def create_app():
 
 	api.route("/api-docs")
 
-	# ALL ADMIN ROUTES
+	# ADMIN ROUTES
 	from .views import dashboard
 	app.register_blueprint(dashboard)
 
-	# TODO: REMEMBER TO FIX THIS
-	from .views.auth import auth
-	from app.apis.user import user
-	app.register_blueprint(auth)
-	app.register_blueprint(user)
 
-	# API ENDPOINT
+	# API ENDPOINTS
 	from .apis import api
 	app.register_blueprint(api, url_prefix="/api/v1")
 

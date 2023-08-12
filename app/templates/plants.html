@@ -6,10 +6,13 @@
 <tr>
   <td style="white-space: nowrap;">{{ plant.get('plant_id') }}</td>
   <td style="white-space: nowrap;">{{ plant.get('name') }}</td>
+  <td style="white-space: nowrap;">
+    <img src="{{ plant.get('image')[0] }}" width="50" class="img-fluid" alt="">
+  </td>
   <td style="white-space: nowrap;">&#8358; {{ plant.get('price') }}</td>
   <td style="white-space: nowrap;">{{ plant.get('description') }}</td>
   <td style="white-space: nowrap;">{{ plant.get('quantity') }}</td>
-  <td style="white-space: nowrap;">{% if plant.get('is_available')|string == 'None' %} <div class="badge badge-danger badge-sm">Not Available</div> {% else %} <div class="badge badge-success badge-sm">Available</div> {% endif %}</td>
+  <td style="white-space: nowrap;">{% if plant.get('is_available')|string == 'None' %} <div class="badge badge-danger badge-sm">Out of stock</div> {% else %} <div class="badge badge-success badge-sm">Available</div> {% endif %}</td>
   <td>
     <div class="d-flex">
       <a href="/plants/edit/{{ plant.get('plant_id') }}" class="text-sm text-primary mr-2">Edit</a>
@@ -44,6 +47,7 @@
           <tr>
             <th>Plant ID</th>
             <th>Name</th>
+            <th>Image</th>
             <th>Price</th>
             <th>Description</th>
             <th>Quantity</th>
@@ -55,6 +59,7 @@
           <tr>
             <th>Plant ID</th>
             <th>Name</th>
+            <th>Image</th>
             <th>Price</th>
             <th>Description</th>
             <th>Quantity</th>

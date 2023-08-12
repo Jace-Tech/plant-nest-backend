@@ -29,6 +29,14 @@ def filter_func(seq, func):
 	return res
 
 
+def dict_except(obj, *unused):
+	new_obj = {**obj}
+	for key in obj:
+		if key in unused: del new_obj[key]
+	return new_obj
+		
+
+
 # TODO: MOVE ALL THESE FUNCTIONS TO THE DATABASE FOLDER INSIDE THE APPROPRIATE FILE
 def select_product(product_id,cursor):
 	try:
