@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify
-from ..utils.helpers import select_product,response,select_product,insert_item,remove_product,products_by_user
+from ..utils.helpers import response
+
 from ..database import get_connection
+from ..database.general_functions import select_product,select_product,insert_item,remove_product,products_by_user
 
 cart = Blueprint("cart", __name__)
 
@@ -9,10 +11,11 @@ connection, cursor = get_connection()
 tableName = "cart_items"
 
 
-@cart.get('/add')
+@cart.get('/add', methods=['POST'])
 def add_to_cart(cursor):
     
-    product =  request.get_json()
+    product =  request.json()
+    
     status = insert_item(product,cursor,tableName); 
     
     if status == True:
@@ -21,7 +24,7 @@ def add_to_cart(cursor):
     return response('Item was not added to the cart successfully.', success=False)
     
     
-@cart.get('/<user_id>')
+@cart.get('/<user_id>',methods=['GET'])
 def get_cart_contents(user_id):
     
     try:
@@ -45,9 +48,9 @@ def get_cart_contents(user_id):
         return response('An error occurred.', success=False)
 
 
-@cart.get('/remove')
+@cart.get('/remove',methods=['POST'])
 def remove_from_cart():
-    product =  request.get_json()
+    product =  request.json()
     status = remove_product(product,cursor,tableName)
     if status == True:
         return response(f"Item removed from the cart successfully")

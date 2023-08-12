@@ -34,4 +34,3 @@ def dict_except(obj, *unused):
 	for key in obj:
 		if key in unused: del new_obj[key]
 	return new_obj
-		

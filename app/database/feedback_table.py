@@ -1,6 +1,6 @@
 from . import get_connection
 
-def create_user_feedback_table():
+def create_feedback_table():
     db = get_connection()
     if not db: return
     connection, cursor = db
