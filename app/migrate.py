@@ -10,7 +10,6 @@ from .database.accessory_table import create_accessory_table
 from .database.cart_table import create_product_cart_table
 from .database.order_table import create_orders_table
 from .database.wishlist_table import create_product_wishlist_table
-from .database.feedback_table import create_user_feedback_table
 
 
 # RUN MIGRATIONS
@@ -24,4 +23,4 @@ def run_migrations():
     create_product_cart_table()
     create_orders_table()
     create_product_wishlist_table()
-    create_user_feedback_table()
+    create_feedback_table()
