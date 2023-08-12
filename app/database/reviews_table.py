@@ -39,8 +39,8 @@ def create_reviews_table():
     print("TABLE CREATED!")
     connection.close()
 
-def get_all_reviews():
-    """Returns all the reviews"""
+def get_all_reviews(cursor):
+    """Returns all the reviews with corresponding product names"""
 
     db = get_connection()
     if not db: return
@@ -48,7 +48,19 @@ def get_all_reviews():
     sql = "SELECT * FROM reviews"
 
     cursor.execute(sql)
-    return cursor.fetchall()
+    reviews = cursor.fetchall()
+
+    reviews_with_products = []
+
+    for review in reviews:
+        product_id = review['product_id']
+        product = select_product(product_id, cursor)
+        
+        if product:
+            review['product_name'] = product['name']
+            reviews_with_products.append(review)
+
+    return reviews_with_products
 
 def calculate_average_rating(product_id, cursor):
     try:
@@ -74,10 +86,12 @@ def calculate_average_rating(product_id, cursor):
 def fetch_products_with_average_ratings():
     try:
         db = get_connection()
-        if not db: return
+        if not db:
+            return
+        
         _, cursor = db
         
-        products_query = "SELECT product_id, product_name FROM products"
+        products_query = "SELECT product_id, product_name, price, quantity FROM products"
         cursor.execute(products_query)
         products = cursor.fetchall()
         
@@ -91,10 +105,10 @@ def fetch_products_with_average_ratings():
                 average_rating = calculate_average_rating(product_id, cursor)
                 
                 products_with_ratings.append({
-                    'product_id': product_id,
-                    'product_name': product['product_name'],
-                    'average_rating': average_rating,
-                    'product_details': product_details
+                    'product_name': product_details.get('name'),
+                    'price': product['price'],
+                    'quantity': product['quantity'],
+                    'average_rating': average_rating
                 })
         
         return products_with_ratings

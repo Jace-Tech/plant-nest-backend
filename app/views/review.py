@@ -32,7 +32,7 @@ def get_products_with_average_ratings_route():
         
     finally:
         
-        return render_template("admin/productRatings.html",products_with_ratings)
+        return render_template("productRatings.html",products_with_ratings)
 
 
 @admin_review.get('/product/<product_id>')
