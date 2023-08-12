@@ -83,27 +83,27 @@ def products_by_user(user_id, cursor,tableName):
 
 
 def insert_review(review, cursor):
-    try:
-        insert_query = "INSERT INTO reviews (user_id, product_id, rating, feedback) VALUES (%s, %s, %s, %s)"
-        values = (review['user_id'], review['product_id'], review['rating'], review['feedback'])
-        cursor.execute(insert_query, values)
+	try:
+		insert_query = "INSERT INTO reviews (user_id, product_id, rating, feedback) VALUES (%s, %s, %s, %s)"
+		values = (review['user_id'], review['product_id'], review['rating'], review['feedback'])
+		cursor.execute(insert_query, values)
 
-        return True  
-    except Exception as e:
-        return str(e)
+		return True
+	except Exception as e:
+		return str(e)
 
 def fetch_product_review(product_id, cursor):
-    try:
-        
-        query = "SELECT AVG(rating) AS average_rating FROM reviews WHERE product_id = %s"
-        cursor.execute(query, (product_id,))
+	try:
+		query = "SELECT AVG(rating) AS average_rating FROM reviews WHERE product_id = %s"
+		cursor.execute(query, (product_id,))
 
-     
-        result = cursor.fetchone()
 
-        if result and result['average_rating'] is not None:
-            return result['average_rating']
-        else:
-            return "Product not found or no reviews available."
-    except Exception as e:
-        return str(e)
+		result = cursor.fetchone()
+
+		if result and result['average_rating'] is not None:
+			return result['average_rating']
+		else:
+			return "Product not found or no reviews available."
+
+	except Exception as e:
+		return str(e)
