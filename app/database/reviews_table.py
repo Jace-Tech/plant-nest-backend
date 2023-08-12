@@ -1,5 +1,24 @@
 from . import get_connection
-from database.general_functions import select_product
+
+
+
+def select_product(product_id,cursor):
+	try:
+		# Prepare and execute the SQL query
+		query = "SELECT * FROM plants WHERE plant_id = %s"
+		cursor.execute(query, (product_id,))
+
+		# Fetch the result
+		product = cursor.fetchone()
+
+		if product:
+			return str(product)
+		else:
+			return "Plant not found."
+	except Exception as e:
+		return str(e)
+
+
 
 def create_reviews_table():
     db = get_connection()
