@@ -37,8 +37,9 @@ def handle_create_order():
     amount = data.get('amount')
 
     # ADD ORDER TO DATABASE
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     sql = "INSERT INTO orders (order_id, user_id, firstname, lastname, phone, email, products, address, amount, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    cursor.execute(sql, [order_id, user_id, firstname, lastname, phone, email, products, address, amount, 'now()'])
+    cursor.execute(sql, [order_id, user_id, firstname, lastname, phone, email, products, address, amount, now])
     conn.commit()
 
     # NOTIFY ADMIN

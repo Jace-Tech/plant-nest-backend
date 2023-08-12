@@ -4,6 +4,7 @@ from ..utils.helpers import generate_id
 from ..database.category_table import get_all_categories, get_category_by_id
 from ..database import get_connection
 from ..utils.decorators import admin_required
+from datetime import datetime
 
 
 category = Blueprint("category", __name__)
@@ -42,8 +43,9 @@ def handle_create_category():
         id = generate_id("cat_")
         category = request.form.get('category')
 
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         sql = "INSERT INTO categories (category_id, name, date) VALUES (%s, %s, %s)"
-        cursor.execute(sql, [id, category, 'now()'])
+        cursor.execute(sql, [id, category, now])
         conn.commit()
         
         if not cursor.rowcount: raise CustomError("Failed to update category")

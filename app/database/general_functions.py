@@ -1,4 +1,4 @@
-
+from datetime import datetime
 def select_product(product_id,cursor):
 	try:
 		# Prepare and execute the SQL query
@@ -32,8 +32,9 @@ def insert_item(product, db ,tableName):
 			update_query = f"UPDATE {tableName} SET quantity = %s WHERE user_id = %s AND product_id = %s"
 			cursor.execute(update_query, (new_quantity, user_id, product_id))
 		else:
+			now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 			insert_query = f"INSERT INTO {tableName} (user_id, product_id, quantity, date) VALUES (%s, %s, %s, %s)"
-			cursor.execute(insert_query, (user_id, product_id, quantity, 'now()'))
+			cursor.execute(insert_query, (user_id, product_id, quantity, now))
 
 		conn.commit()
 
@@ -84,8 +85,9 @@ def products_by_user(user_id, cursor,tableName):
 
 def insert_review(review, cursor):
 	try:
+		now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 		insert_query = "INSERT INTO reviews (user_id, product_id, rating, feedback, date) VALUES (%s, %s, %s, %s, %s)"
-		values = (review['user_id'], review['product_id'], review['rating'], review['feedback'], 'now()')
+		values = (review['user_id'], review['product_id'], review['rating'], review['feedback'], now)
 		cursor.execute(insert_query, values)
 
 		return True

@@ -19,6 +19,6 @@ def get_plants():
 
 @plants.get('/<plant_id>')
 @catch_exception
-def get_one_plants():
-    plant = get_one_plant()
+def get_one_plants(plant_id):
+    plant = get_one_plant(plant_id)
     return response("Plant", plant)
