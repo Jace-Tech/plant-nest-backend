@@ -1,5 +1,5 @@
 from . import get_connection
-from database.general_functions import select_product
+from .general_functions import select_product
 
 def create_reviews_table():
     db = get_connection()
