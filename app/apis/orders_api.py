@@ -11,12 +11,12 @@ from ..utils.mailer import send_mail
 import json
 import datetime
 
-order_api = Blueprint("orders_api", __name__)
+order_api = Blueprint("api_order", __name__)
 
-@order_api.post("/")
+@order_api.post("/create")
 @catch_exception
 @jwt_required
-def handle_create_order_():
+def create_order_():
     user_id = get_jwt_identity()
     user = get_one_user(user_id)
     if not user: raise CustomRequestError("No user found", 404)
@@ -61,11 +61,11 @@ def handle_create_order_():
 
 
 # GET ORDER BY ID
-# @order_api.get("/<id>")
-# @catch_exception
-# def handle_get_order(id):
-#     order = get_order_by_id(id)
-#     return response("Order", order)
+@order_api.get("/<id>")
+@catch_exception
+def handle_get_order(id):
+    order = get_order_by_id(id)
+    return response("Order", order)
 
 
 # GET USERS ORDER
