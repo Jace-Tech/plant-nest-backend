@@ -80,8 +80,8 @@ def handle_admin_sign_page():
         hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
         # INSERT TO DATABASE
-        sql = "INSERT INTO admins (admin_id, name, image, email, password) VALUES (%s, %s, %s, %s, %s)"
-        cursor.execute(sql, ("ADMIN", fullname, image_url, email, hashed_password))
+        sql = "INSERT INTO admins (admin_id, name, image, email, password, date) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, ("ADMIN", fullname, image_url, email, hashed_password, 'now()'))
         connection.commit()
 
         # CHECK IF SUCCESSFUL
@@ -95,7 +95,7 @@ def handle_admin_sign_page():
 
     except Exception as e:
         flash(str(e), "error")
-    return redirect(url_for('auth.signup_page'))
+    return redirect(url_for('dashboard.auth.signup_page'))
 
 
 @auth.route('/logout')

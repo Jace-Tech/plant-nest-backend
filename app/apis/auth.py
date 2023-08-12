@@ -65,8 +65,8 @@ def handle_signup_page():
     # INSERT THE USER INTO THE TABLE
     user_id = str(uuid.uuid4())[:20]
     hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
-    sql = "INSERT INTO users (user_id, fullname, username, contact_number, email, password) VALUES (%s, %s, %s, %s, %s, %s)"
-    cursor.execute(sql, (user_id, fullname, username, contact_number, email, hashed_password))
+    sql = "INSERT INTO users (user_id, fullname, username, contact_number, email, password, date) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    cursor.execute(sql, (user_id, fullname, username, contact_number, email, hashed_password, 'now()'))
     connection.commit()
 
     # SEND EMAIL
@@ -85,4 +85,4 @@ def handle_signup_page():
     # SET EXPIRY TIME [7d]
     expiry_time = timedelta(days=7)
     token = create_access_token(identity=user['user_id'], expires_delta=expiry_time)
-    return response("User registration successful", {"token": token, "user": user})
+    return response("Registration successful", {"token": token, "user": user})

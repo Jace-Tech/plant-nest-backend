@@ -15,7 +15,8 @@ def create_orders_table():
         `email` VARCHAR(100) DEFAULT NULL,
 		`products` VARCHAR(255) NOT NULL,
 		`address` VARCHAR(15) NOT NULL,
-		`amount` VARCHAR(100) NOT NULL
+		`amount` VARCHAR(100) NOT NULL,
+		`date` DATETIME
 	)"""
 
 	cursor.execute(sql)

@@ -13,7 +13,8 @@ def create_accessory_table():
 		`price` FLOAT,
 		`quantity` INT,
 		`image_url` VARCHAR(200),
-		`is_available` TINYINT DEFAULT 1
+		`is_available` TINYINT DEFAULT 1,
+		`date` DATETIME
 	)"""
 
 	cursor.execute(sql)

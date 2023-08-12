@@ -10,7 +10,8 @@ def create_product_wishlist_table():
         wishlist_item_id INT PRIMARY KEY,
         user_id VARCHAR(20),
         product_id  VARCHAR(20),
-        quantity INT NOT NULL
+        quantity INT NOT NULL,
+        `date` DATETIME
     )"""
 
     cursor.execute(sql)

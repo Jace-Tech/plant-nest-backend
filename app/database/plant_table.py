@@ -14,7 +14,8 @@ def create_plant_table():
 		`quantity` INT,
 		`image_url` LONGTEXT,
 		`is_available` TINYINT DEFAULT 1,
-		`category_id` VARCHAR(20)
+		`category_id` VARCHAR(20),
+		`date` DATETIME
 	)"""
 
 	cursor.execute(sql)
