@@ -1,0 +1,58 @@
+{% set title = "Customers" %}
+{% extends "_layout.html" %}
+
+{# PLANT MACROS #}
+{% macro customer_row(customer) %}
+<tr>
+  <td style="white-space: nowrap;">{{ customer.get('user_id') }}</td>
+  <td style="white-space: nowrap;">{{ customer.get('fullname') }}</td>
+  <td style="white-space: nowrap;">{{ customer.get('username') }}</td>
+  <td style="white-space: nowrap;">{{ customer.get('email') }}</td>
+  <td style="white-space: nowrap;">{{ customer.get('contact_number') }}</td>
+</tr>
+{% endmacro %}
+
+{% block content %}
+<div class="card shadow mb-4">
+  <div class="card-header d-flex align-items-center justify-content-between py-3">
+    <h6 class="m-0 font-weight-bold text-primary">All Customers</h6>
+  </div>
+  {% if customers|length %}
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Full Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Contact Number</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>User ID</th>
+            <th>Full Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Contact Number</th>
+          </tr>
+        </tfoot>
+        <tbody>
+          {# PRINT CUSTOMER ROWS #}
+          {% for customer in customers %}
+            {{ customer_row(customer) }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="text-center py-5 ">
+    <img src="/static/svgs/empty.svg" width="100" class="mx-auto img-fluid mb-5" />
+    <p class="text-muted text-center mb-1">No customer available</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

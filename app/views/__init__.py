@@ -76,4 +76,6 @@ dashboard.register_blueprint(accessory, url_prefix="/accessories")
 from .category import category
 dashboard.register_blueprint(category, url_prefix="/categories")
 
-
+# CUSTOMER ROUTES
+from .customers import customer
+dashboard.register_blueprint(customer, url_prefix="/customers")

@@ -6,6 +6,7 @@ from ..utils.errors import CustomError
 from ..utils.helpers import generate_id
 from ..utils.uploader import upload_file
 from ..utils.decorators import admin_required
+from datetime import datetime
 
 
 accessory = Blueprint("accessory", __name__)
@@ -41,7 +42,7 @@ def handle_accessory_create():
     try:
         data = request.form
 
-        accessory_id = generate_id("pln_")
+        accessory_id = generate_id("acs_")
         accessory_name = data.get('name')
         quantity = data.get('quantity')
         price = data.get('price')
@@ -65,8 +66,9 @@ def handle_accessory_create():
         conn, cursor = db
 
         # STORE IN DB
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         query = "INSERT INTO accessories (accessory_id, name, description, price, quantity, image_url, date) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (accessory_id, accessory_name, description, price, quantity, image_urls, 'now()'))
+        cursor.execute(query, (accessory_id, accessory_name, description, price, quantity, image_urls, now))
         conn.commit()
 
         if not cursor.rowcount: raise CustomError("Failed to create accessory")

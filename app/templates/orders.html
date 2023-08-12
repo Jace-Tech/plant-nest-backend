@@ -1,2 +1,107 @@
-{% set title = "Order" %}
+{% set title = "Orders" %}
 {% extends "_layout.html" %}
+
+{# PLANT MACROS #}
+{% macro order_row(order) %}
+<tr>
+  <td style="white-space: nowrap;">{{ order.get('order_id') }}</td>
+  <td style="white-space: nowrap;">{{ order.get('user') }}</td>
+  <td style="white-space: nowrap;">&#8358; {{ order.get('price') }}</td>
+  <td style="white-space: nowrap;">{{ order.get('description') }}</td>
+  <td style="white-space: nowrap;">{{ order.get('quantity') }}</td>
+  <td style="white-space: nowrap;">{% if order.get('is_available')|string == 'None' %} <div class="badge badge-danger badge-sm">Out of stock</div> {% else %} <div class="badge badge-success badge-sm">Available</div> {% endif %}</td>
+  <td>
+    <div class="d-flex">
+      <a href="/orders/approve/{{ order.get('order_id') }}" class="text-sm text-primary mr-2">Approve Order</a>
+      <a href="/orders/delete/{{ order.get('order_id') }}" class="text-sm text-danger">Delete</a>
+    </div>
+  </td>
+</tr>
+{% endmacro %}
+
+{% block content %}
+<div class="card shadow mb-4">
+  <div class="card-header d-flex align-items-center justify-content-between py-3">
+    <h6 class="m-0 font-weight-bold text-primary">All orders</h6>
+  </div>
+  {% if orders|length %}
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User ID</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Amount</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Availability</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>Order ID</th>
+            <th>User ID</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Amount</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Availability</th>
+            <th></th>
+          </tr>
+        </tfoot>
+        <tbody>
+          {# PRINT PLANT ROWS #}
+          {% for order in orders %}
+            {{ order_row(order) }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="text-center py-5 ">
+    <img src="/static/svgs/empty.svg" width="100" class="mx-auto img-fluid mb-5" />
+    <p class="text-muted text-center mb-1">No order available</p>
+    <a href="/orders/create" class="text-primary text-sm">Add order</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Page level plugins -->
+    <script src="/static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $('#dataTable').DataTable();
+  });
+  
+  const uploadForm = document.querySelector("[data-upload-form]")
+  const uploadBtn = document.querySelector("#upload-btn")
+  const inputElem = document.querySelector("#input")
+
+  uploadBtn.addEventListener("click", (e) => {
+    e.preventDefault()
+    inputElem.click()
+  })
+
+  inputElem.addEventListener("change", async () => {
+    if(!inputElem.files[0]) return 
+
+    const formData = new FormData()
+    formData.append("file", inputElem.files[0])
+
+    fetch("http://localhost:4000/orders/create/bulk", { method: "POST", data: formData })
+    .then((req) => req.text())
+    .then((res) => console.log(res))
+    .catch(err => console.log(err))
+  })
+</script>
+{% endblock %}
