@@ -42,8 +42,8 @@ def handle_create_category():
         id = generate_id("cat_")
         category = request.form.get('category')
 
-        sql = "INSERT INTO categories (category_id, name) VALUES (%s, %s)"
-        cursor.execute(sql, [id, category])
+        sql = "INSERT INTO categories (category_id, name, date) VALUES (%s, %s, %s)"
+        cursor.execute(sql, [id, category, 'now()'])
         conn.commit()
         
         if not cursor.rowcount: raise CustomError("Failed to update category")

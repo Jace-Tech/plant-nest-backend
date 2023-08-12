@@ -10,7 +10,8 @@ def create_feedback_table():
         user_id VARCHAR(20),
         product_id VARCHAR(20),
         rating INT NOT NULL,
-        feedback TEXT
+        feedback TEXT,
+        `date` DATETIME
     )"""
 
     cursor.execute(sql)

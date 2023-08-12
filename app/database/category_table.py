@@ -8,7 +8,8 @@ def create_category_table():
 	connection, cursor = db
 	sql = """CREATE TABLE IF NOT EXISTS categories (
 		`category_id` VARCHAR(20) PRIMARY KEY,
-		`name` VARCHAR(50)
+		`name` VARCHAR(50),
+		`date` DATETIME
 	)"""
 
 	cursor.execute(sql)

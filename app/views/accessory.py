@@ -43,7 +43,6 @@ def handle_accessory_create():
 
         accessory_id = generate_id("pln_")
         accessory_name = data.get('name')
-        category = data.get('category')
         quantity = data.get('quantity')
         price = data.get('price')
         description = data.get('description')
@@ -66,13 +65,13 @@ def handle_accessory_create():
         conn, cursor = db
 
         # STORE IN DB
-        query = "INSERT INTO accessory (accessory_id, name, description, price, quantity, image_url, category_id) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (accessory_id, accessory_name, description, price, quantity, image_urls, category))
-        conn.commit() 
+        query = "INSERT INTO accessories (accessory_id, name, description, price, quantity, image_url, date) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (accessory_id, accessory_name, description, price, quantity, image_urls, 'now()'))
+        conn.commit()
 
         if not cursor.rowcount: raise CustomError("Failed to create accessory")
 
-        flash("Plant created!", "success")
+        flash("Accessory created!", "success")
         return redirect(url_for('dashboard.accessory.view_accessory_page'))
 
     except CustomError as e: 
@@ -81,8 +80,7 @@ def handle_accessory_create():
     except Exception as e:
         flash(str(e), category="error")
 
-    all_categories = get_all_categories()
-    return render_template("accessory-create.html", categories=all_categories)
+    return render_template("accessory-create.html")
 
 
 @accessory.get("/delete/<id>")
@@ -94,13 +92,13 @@ def handle_accessory_delete(id):
         if not db: raise CustomError("Couldn't connect to database", "error")
 
         conn, cursor = db
-        sql = "DELETE FROM accessory WHERE accessory_id = %s"
+        sql = "DELETE FROM accessories WHERE accessory_id = %s"
         cursor.execute(sql, [id])
         conn.commit()
         conn.close()
 
         if not cursor.rowcount: raise CustomError("Failed to delete accessory", "error")
-        flash("Plant deleted successfully", "success")
+        flash("Accessory deleted successfully", "success")
         conn.close()
     except CustomError as e:
         flash(e.message, e.category)
@@ -118,7 +116,7 @@ def handle_accessory_edit(id):
         if not db: raise CustomError("Couldn't connect to database", "error")
 
         conn, cursor = db
-        sql = "SELECT * FROM accessory WHERE accessory_id = %s"
+        sql = "SELECT * FROM accessories WHERE accessory_id = %s"
         cursor.execute(sql, [id])
 
         if not cursor.rowcount: raise CustomError("Plant not found", "error")
@@ -142,7 +140,6 @@ def handle_accessory_update(id):
         # GET PLANT DETAILS
         data = request.form
         accessory_name = data.get('name')
-        category = data.get('category')
         quantity = data.get('quantity')
         price = data.get('price')
         description = data.get('description')
@@ -159,15 +156,15 @@ def handle_accessory_update(id):
                 image_urls.append(result.get('secure_url'))
             image_urls = json.dumps(image_urls)
 
-        sql = """UPDATE accessory 
-            SET name = %s, description = %s, price = %s, quantity = %s, image_url = %s, category_id = %s
+        sql = """UPDATE accessories
+            SET name = %s, description = %s, price = %s, quantity = %s, image_url = %s
             WHERE accessory_id = %s"""
-        cursor.execute(sql, [accessory_name, description, price, quantity, image_urls, category, id])
+        cursor.execute(sql, [accessory_name, description, price, quantity, image_urls, id])
         conn.commit()
         conn.close()
 
         if not cursor.rowcount: raise CustomError("Failed to update accessory", "error")
-        flash("Plant updated", "success")
+        flash("Accessory updated", "success")
         return redirect("/accessory")
     
     except CustomError as e:

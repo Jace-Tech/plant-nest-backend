@@ -9,7 +9,8 @@ def create_product_cart_table():
         cart_item_id INT PRIMARY KEY AUTO_INCREMENT,
         user_id VARCHAR(20),
         product_id VARCHAR(20),
-        quantity INT NOT NULL
+        quantity INT NOT NULL,
+        `date` DATETIME
     )"""
 
     cursor.execute(sql)

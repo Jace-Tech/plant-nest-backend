@@ -80,8 +80,8 @@ def handle_plant_create():
         conn, cursor = db
 
         # STORE IN DB
-        query = "INSERT INTO plants (plant_id, name, description, price, quantity, image_url, category_id) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (plant_id, plant_name, description, price, quantity, image_urls, category))
+        query = "INSERT INTO plants (plant_id, name, description, price, quantity, image_url, category_id, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (plant_id, plant_name, description, price, quantity, image_urls, category, 'now()'))
         conn.commit() 
 
         if not cursor.rowcount: raise CustomError("Failed to create plant")

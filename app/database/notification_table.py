@@ -13,7 +13,7 @@ def create_notification_table():
         `content` TEXT,
         `is_seen` TINYINT DEFAULT 0,
         `user_id` VARCHAR(20),
-        FOREIGN KEY (`user_id`) REFERENCES admins(`admin_id`)
+        `date` DATETIME
     )"""
 
     cursor.execute(sql)
