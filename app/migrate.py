@@ -23,3 +23,4 @@ def run_migrations():
     create_orders_table()
     create_product_wishlist_table()
     create_reviews_table()
+    create_category_table()
