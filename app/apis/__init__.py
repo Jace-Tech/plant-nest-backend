@@ -5,7 +5,7 @@ from .user import user
 from .cart import cart
 from .auth import auth
 from .plants import plants
-from .accessory import accessories
+from .accessory import access
 from .wishlist import wishlist
 
 api = Blueprint("apis", __name__)
@@ -21,4 +21,4 @@ api.register_blueprint(auth, url_prefix="/auth")
 api.register_blueprint(cart, url_prefix="/cart")
 api.register_blueprint(wishlist, url_prefix="/wishlist")
 api.register_blueprint(plants, url_prefix="/plants")
-api.register_blueprint(accessories, url_prefix="/accessories")
+api.register_blueprint(access, url_prefix="/access")
