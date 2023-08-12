@@ -8,7 +8,8 @@ def create_category_table():
 	connection, cursor = db
 	sql = """CREATE TABLE IF NOT EXISTS categories (
 		`category_id` VARCHAR(20) PRIMARY KEY,
-		`name` VARCHAR(50)
+		`name` VARCHAR(50),
+		`date` DATETIME
 	)"""
 
 	cursor.execute(sql)
@@ -24,3 +25,12 @@ def get_all_categories():
 	sql = "SELECT * FROM categories"
 	cursor.execute(sql)
 	return cursor.fetchall()
+
+
+def get_category_by_id(id):
+	db = get_connection()
+	if not db: return
+	_, cursor = db
+	sql = "SELECT * FROM categories WHERE category_id = %s"
+	cursor.execute(sql, [id])
+	return cursor.fetchone()

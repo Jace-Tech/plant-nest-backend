@@ -8,9 +8,10 @@ def create_product_wishlist_table():
 
     sql = """CREATE TABLE IF NOT EXISTS wishlist_items (
         wishlist_item_id INT PRIMARY KEY,
-        user_id INT,
-        product_id INT,
-        quantity INT NOT NULL
+        user_id VARCHAR(20),
+        product_id  VARCHAR(20),
+        quantity INT NOT NULL,
+        `date` DATETIME
     )"""
 
     cursor.execute(sql)

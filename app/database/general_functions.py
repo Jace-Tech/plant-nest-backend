@@ -32,8 +32,8 @@ def insert_item(product, db ,tableName):
 			update_query = f"UPDATE {tableName} SET quantity = %s WHERE user_id = %s AND product_id = %s"
 			cursor.execute(update_query, (new_quantity, user_id, product_id))
 		else:
-			insert_query = f"INSERT INTO {tableName} (user_id, product_id, quantity) VALUES (%s, %s, %s)"
-			cursor.execute(insert_query, (user_id, product_id, quantity))
+			insert_query = f"INSERT INTO {tableName} (user_id, product_id, quantity, date) VALUES (%s, %s, %s, %s)"
+			cursor.execute(insert_query, (user_id, product_id, quantity, 'now()'))
 
 		conn.commit()
 
@@ -84,8 +84,8 @@ def products_by_user(user_id, cursor,tableName):
 
 def insert_review(review, cursor):
     try:
-        insert_query = "INSERT INTO reviews (user_id, product_id, rating, feedback) VALUES (%s, %s, %s, %s)"
-        values = (review['user_id'], review['product_id'], review['rating'], review['feedback'])
+        insert_query = "INSERT INTO reviews (user_id, product_id, rating, feedback, date) VALUES (%s, %s, %s, %s, %s)"
+        values = (review['user_id'], review['product_id'], review['rating'], review['feedback'], 'now()')
         cursor.execute(insert_query, values)
 
         return True  

@@ -6,10 +6,11 @@ def create_product_cart_table():
     connection, cursor = db
 
     sql = """CREATE TABLE IF NOT EXISTS cart_items (
-        cart_item_id INT PRIMARY KEY,
-        user_id INT,
-        product_id INT,
-        quantity INT NOT NULL
+        cart_item_id INT PRIMARY KEY AUTO_INCREMENT,
+        user_id VARCHAR(20),
+        product_id VARCHAR(20),
+        quantity INT NOT NULL,
+        `date` DATETIME
     )"""
 
     cursor.execute(sql)
