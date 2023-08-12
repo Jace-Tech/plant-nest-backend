@@ -9,9 +9,8 @@ review = Blueprint("review", __name__)
 connection, cursor = get_connection()
 
 
-@review.get('/feedback',methods=['POST'])
+@review.post('/feedback')
 def submit_feedback():
-    
     review = request.json('review')
     status = insert_review(review,cursor)
     if status:
@@ -20,13 +19,13 @@ def submit_feedback():
         return response("feedback not submitted", success=False)
 
 
-@review.get('/average_ratings/<int:product_id>', methods=['GET'])
+@review.get('/average_ratings/<int:product_id>')
+
 def average_rating(product_id):
     status = fetch_product_review(product_id,cursor)
     if status is not None :
         return response('successfull',status)
-        
-    return response('No reviews available for this product.'), 404
+    return response('No reviews available for this product.')
     
     
 

@@ -7,15 +7,12 @@ from ..database.general_functions import select_product,select_product,insert_it
 cart = Blueprint("cart", __name__)
 
 connection, cursor = get_connection()
-
 tableName = "cart_items"
 
 
-@cart.get('/add', methods=['POST'])
+@cart.post('/add')
 def add_to_cart(cursor):
-    
     product =  request.json()
-    
     status = insert_item(product,cursor,tableName); 
     
     if status == True:
@@ -24,7 +21,7 @@ def add_to_cart(cursor):
     return response('Item was not added to the cart successfully.', success=False)
     
     
-@cart.get('/<user_id>',methods=['GET'])
+@cart.get('/<user_id>')
 def get_cart_contents(user_id):
     
     try:
@@ -48,7 +45,7 @@ def get_cart_contents(user_id):
         return response('An error occurred.', success=False)
 
 
-@cart.get('/remove',methods=['POST'])
+@cart.post('/remove')
 def remove_from_cart():
     product =  request.json()
     status = remove_product(product,cursor,tableName)

@@ -13,13 +13,14 @@ def create_notification_table():
         `content` TEXT,
         `is_seen` TINYINT DEFAULT 0,
         `user_id` VARCHAR(20),
-        FOREIGN KEY (`user_id`) REFERENCES admins(`admin_id`)
+        `date` DATETIME
     )"""
 
     cursor.execute(sql)
     connection.commit()
     print("TABLE CREATED!")
     connection.close()
+
 
 def create_notification(title, message, user_id):
     try:
@@ -36,6 +37,23 @@ def create_notification(title, message, user_id):
             raise Exception("Error occurred.")
         connection.close()
         return True
+    except Exception as e:
+        print(e)
+        return None
+
+
+def get_notification(user_id):
+    try:
+        db = get_connection()
+        if not db: return
+
+        connection, cursor = db
+        sql = "SELECT * FROM notifications WHERE user_id = %s"
+        cursor.execute(sql, [user_id])
+        notifications = cursor.fetchall()
+        connection.close()
+
+        return notifications
     except Exception as e:
         print(e)
         return None
