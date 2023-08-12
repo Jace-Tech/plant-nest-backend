@@ -2,6 +2,7 @@ from flask import Flask, request, render_template
 from .migrate import run_migrations
 from flask_jwt_extended import JWTManager
 from flask_docs_api.api import Api
+from flask_cors import CORS
 from .utils.helpers import response
 from .utils.variables import APP_NAME, MAIL_SERVER, MAIL_PASSWORD, MAIL_PORT, APP_SECRET, MAIL_USERNAME
 
@@ -10,6 +11,7 @@ def create_app():
 	app = Flask(__name__)
 	api = Api(app, "Test")
 	jwt = JWTManager(app)
+	CORS(app)
 
 	# RUN MIGRATIONS
 	run_migrations()

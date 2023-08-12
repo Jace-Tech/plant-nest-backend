@@ -4,11 +4,11 @@ from ..utils.helpers import response
 from ..utils.errors import catch_exception
 from ..database.accessory_table import get_all_accessories, get_one_accessory
 
-accessories = Blueprint("accessories", __name__)
+access = Blueprint("access", __name__)
 connection, cursor = get_connection()
 
 
-@accessories.get('/')
+@access.get('/')
 @catch_exception
 def get_accessories():
     # QUERY THE DATABASE FOR ALL THE PLANTS
@@ -16,7 +16,7 @@ def get_accessories():
     return response("All accessories", accessories)
 
 
-@accessories.get('/<accessory_id>')
+@access.get('/<accessory_id>')
 @catch_exception
 def get_one_accessories(accessory_id):
     accessory = get_one_accessory(accessory_id)
