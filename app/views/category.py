@@ -3,10 +3,13 @@ from ..utils.errors import CustomError
 from ..utils.helpers import generate_id
 from ..database.category_table import get_all_categories, get_category_by_id
 from ..database import get_connection
+from ..utils.decorators import admin_required
+
 
 category = Blueprint("category", __name__)
 
 @category.get("/")
+@admin_required
 def view_category_page():
     categories = []
     editing = None
@@ -28,6 +31,7 @@ def view_category_page():
 
 # CREATE
 @category.post("/create")
+@admin_required
 def handle_create_category():
     try:
         db = get_connection()
@@ -57,6 +61,7 @@ def handle_create_category():
 
 # UPDATE 
 @category.post("/update/<id>")
+@admin_required
 def handle_update_category(id):
     try:
         db = get_connection()
@@ -84,6 +89,7 @@ def handle_update_category(id):
 
 # DELETE
 @category.get("/delete/<id>")
+@admin_required
 def handle_delete_category(id):
     try:
         db = get_connection()

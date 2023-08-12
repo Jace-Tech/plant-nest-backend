@@ -1,7 +1,11 @@
 from flask import Blueprint, redirect, request, url_for, jsonify, session
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from functools import wraps
-from app.database import get_connection
+from ..database import get_connection
+from ..database.user_table import get_one_user
+from ..utils.helpers import dict_except, response
+from ..utils.mailer import send_mail
+from ..utils.errors import CustomRequestError, catch_exception
 import bcrypt
 
 user = Blueprint("user", __name__)
@@ -23,34 +27,62 @@ def login_required(view_func):
     return wrapper
 
 
-@user.get('/user')
-def user_profile():
-    pass
+# GET USER ROUTE
+@user.get('/<id>')
+@catch_exception
+def user_profile(id):
+    user = get_one_user(id)
+    if not user: raise CustomRequestError("User not found", 404)
+    data = dict_except(user, "password")
+    return response("User details", data)
 
 
-@user.put('/update-profile')
+# UPDATE PROFILE ROUTE
+@user.route('/update-profile', methods=['PUT', 'PATCH'])
+@catch_exception
 @jwt_required()
 def edit_profile():
     current_user_id = get_jwt_identity()
+    prevData = get_one_user(current_user_id)
+
+    # CHECK IF USER EXISTS
+    if not prevData: raise CustomRequestError("No user found", 404)
 
     data = request.get_json()
-    new_fullname = data.get("fullname")
-    new_contact_number = data.get("contactNumber")
+    fullname = data.get("fullName") or prevData['fullname']
+    email = data.get("email") or prevData['email']
+    username = data.get("username") or prevData['username']
+    contact_number = data.get("contactNumber") or prevData['contact_number']
 
-    sql = "UPDATE users SET fullname = %s, contact_number = %s WHERE user_id = %s"
-    cursor.execute(sql, (new_fullname, new_contact_number, current_user_id))
+    sql = """
+        UPDATE users 
+        SET fullname = %s, contact_number = %s, username = %s, email = %s
+        WHERE user_id = %s
+    """
+    cursor.execute(sql, (fullname, contact_number, username, email, current_user_id))
     connection.commit()
+
+    # GET NEW UPDATE
+    user =  get_one_user(current_user_id)
+    data = dict_except(user, "password")
     cursor.close()
 
-    return jsonify({"message": "Profile updated successfully"}), 200
+    return response("Profile updated successfully", data)
 
 
-@user.get('/change-password')
-def change_password():
-    pass
+# RESET PASSWORD ROUTE
+# @user.get('/reset-password')
+# @catch_exception
+# def initiate_password_reset():
+#     email = request.get_json().get('email')
+#     if not email: raise CustomRequestError("Please enter your email address", 400)
+
+#     # SEND EMAIL FOR EMAIL VERIFICATION
+    
 
 
 @user.put('/change-password')
+@catch_exception
 @jwt_required()
 def handle_change_password():
     current_user_id = get_jwt_identity()
@@ -76,12 +108,8 @@ def handle_change_password():
     return jsonify({"message": "Password changed successfully"}), 200
 
 
-@user.get('/reset-password')
-def reset_password():
-    pass
-
-
 @user.post('/reset-password')
+@catch_exception
 def handle_reset_password():
     data = request.get_json()
 

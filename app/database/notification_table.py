@@ -21,6 +21,7 @@ def create_notification_table():
     print("TABLE CREATED!")
     connection.close()
 
+
 def create_notification(title, message, user_id):
     try:
         db = get_connection()
@@ -36,6 +37,23 @@ def create_notification(title, message, user_id):
             raise Exception("Error occurred.")
         connection.close()
         return True
+    except Exception as e:
+        print(e)
+        return None
+
+
+def get_notification(user_id):
+    try:
+        db = get_connection()
+        if not db: return
+
+        connection, cursor = db
+        sql = "SELECT * FROM notifications WHERE user_id = %s"
+        cursor.execute(sql, [user_id])
+        notifications = cursor.fetchall()
+        connection.close()
+
+        return notifications
     except Exception as e:
         print(e)
         return None
