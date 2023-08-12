@@ -6,13 +6,11 @@ def create_product_wishlist_table():
 
     connection, cursor = db
 
-    sql = """CREATE TABLE wishlist_items (
+    sql = """CREATE TABLE IF NOT EXISTS wishlist_items (
         wishlist_item_id INT PRIMARY KEY,
         user_id INT,
         product_id INT,
-        quantity INT NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(user_id),
-        FOREIGN KEY (product_id) REFERENCES plant(plant_id)
+        quantity INT NOT NULL
     )"""
 
     cursor.execute(sql)

@@ -10,7 +10,10 @@ from .database.wishlist_table import create_product_wishlist_table
 
 # RUN MIGRATIONS
 def run_migrations():
-    create_category_table()
     create_user_table()
     create_admin_table()
-    create_plant_table()
+    create_category_table()
+    create_plant_table() 
+    create_feedback_table()
+    create_product_cart_table()
+    create_product_wishlist_table()

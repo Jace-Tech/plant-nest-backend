@@ -5,13 +5,11 @@ def create_product_cart_table():
     if not db: return
     connection, cursor = db
 
-    sql = """CREATE TABLE cart_items (
+    sql = """CREATE TABLE IF NOT EXISTS cart_items (
         cart_item_id INT PRIMARY KEY,
         user_id INT,
         product_id INT,
-        quantity INT NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(user_id),
-        FOREIGN KEY (product_id) REFERENCES plant(plant_id)
+        quantity INT NOT NULL
     )"""
 
     cursor.execute(sql)
