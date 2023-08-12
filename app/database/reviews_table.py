@@ -1,7 +1,6 @@
 from . import get_connection
 
 
-
 def select_product(product_id,cursor):
 	try:
 		# Prepare and execute the SQL query

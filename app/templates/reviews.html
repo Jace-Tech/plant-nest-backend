@@ -1,0 +1,69 @@
+{% set title = "Reviews" %}
+{% extends "_layout.html" %}
+
+{% macro review_row(review) %}
+<tr>
+  <td class="hidden">{{ review.get('review_id') }}</td>
+  <td>{{ review.get('product_id') }}</td>
+  <td>{{ review.get('rating') }}</td>
+  <td>{{ review.get('feedback') }}</td>
+  <td>{{ review.get('date') }}</td>
+</tr>
+{% endmacro %}
+
+{% block content %}
+<div class="card shadow mb-4">
+  <div class="card-header d-flex align-items-center justify-content-between py-3">
+    <h6 class="m-0 font-weight-bold text-primary">All Reviews</h6>
+  </div>
+  {% if reviews|length %}
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th class="hidden">Review ID</th>
+            <th>Product ID</th>
+            <th>Rating</th>
+            <th>Feedback</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th class="hidden">Review ID</th>
+            <th>Product ID</th>
+            <th>Rating</th>
+            <th>Feedback</th>
+            <th>Date</th>
+          </tr>
+        </tfoot>
+        <tbody>
+          {# PRINT REVIEW ROWS #}
+          {% for review in reviews %}
+            {{ review_row(review) }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="text-center py-5 ">
+    <img src="/static/svgs/empty.svg" width="100" class="mx-auto img-fluid mb-5" />
+    <p class="text-muted text-center mb-1">No reviews available</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Page level plugins -->
+    <script src="/static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $('#dataTable').DataTable();
+  });
+</script>
+{% endblock %}

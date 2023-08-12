@@ -19,7 +19,7 @@ def view_all_reviews():
         flash(str(e), category="error")
 
     finally:
-        return render_template("admin/reviews.html", reviews=all_reviews)
+        return render_template("reviews.html", reviews=all_reviews)
     
 @admin_review.get('/ratings')
 def get_products_with_average_ratings_route():
