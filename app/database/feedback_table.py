@@ -5,9 +5,10 @@ def create_feedback_table():
     if not db: return
     connection, cursor = db
 
-    sql = """CREATE TABLE IF NOT EXISTS reviews (
+    sql = """CREATE TABLE IF NOT EXISTS IF NOT EXISTS reviews  (
         review_id INT PRIMARY KEY AUTO_INCREMENT,
         user_id VARCHAR(20),
+        isDeleted INT NOT NULL,
         product_id VARCHAR(20),
         rating INT NOT NULL,
         feedback TEXT,
