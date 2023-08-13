@@ -6,7 +6,7 @@ from .cart import cart
 from .review import review
 from .auth import auth
 from .plants import plants
-from .orders_api import order_api
+from .orders import orders
 from .accessory import access
 from .wishlist import wishlist
 
@@ -25,4 +25,4 @@ api.register_blueprint(wishlist, url_prefix="/wishlist")
 api.register_blueprint(review, url_prefix="/review")
 api.register_blueprint(plants, url_prefix="/plants")
 api.register_blueprint(access, url_prefix="/access")
-# api.register_blueprint(order_api, url_prefix="/ord")
+api.register_blueprint(orders, url_prefix="/orders")
