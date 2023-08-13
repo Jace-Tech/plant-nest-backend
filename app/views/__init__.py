@@ -79,3 +79,7 @@ dashboard.register_blueprint(category, url_prefix="/categories")
 # CUSTOMER ROUTES
 from .customers import customer
 dashboard.register_blueprint(customer, url_prefix="/customers")
+
+#ADMIN REVIEWS ROUTES
+from .review import admin_review
+dashboard.register_blueprint(admin_review, url_prefix="/admin_review")

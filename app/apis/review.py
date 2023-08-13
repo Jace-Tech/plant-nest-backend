@@ -10,7 +10,7 @@ connection, cursor = get_connection()
 
 
 @review.post('/review')
-def submit_feedback():
+def submit_review():
     review = request.json('review')
     status = insert_review(review,cursor)
     if status:
@@ -20,7 +20,6 @@ def submit_feedback():
 
 
 @review.get('/average_ratings/<int:product_id>')
-
 def average_rating(product_id):
     status = fetch_product_review(product_id,cursor)
     if status is not None :
