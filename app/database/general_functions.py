@@ -1,107 +1,120 @@
+from . import get_connection
 from datetime import datetime
-def select_product(product_id,cursor):
-	try:
-		# Prepare and execute the SQL query
-		query = "SELECT * FROM plants WHERE plant_id = %s"
-		cursor.execute(query, (product_id,))
 
-		# Fetch the result
-		product = cursor.fetchone()
+def select_product(product_id):
+    db = get_connection()
+    if not db:
+        return
+    _, cursor = db
+    try:
+        query = "SELECT * FROM plants WHERE plant_id = %s"
+        cursor.execute(query, (product_id,))
+        product = cursor.fetchone()
 
-		if product:
-			return str(product)
-		else:
-			return "Plant not found."
-	except Exception as e:
-		return str(e)
+        if product:
+            return str(product)
+        else:
+            return "Plant not found."
+    except Exception as e:
+        return str(e)
 
-
-def insert_item(product, db, tableName):
+def insert_item(product,table_name):
+    db = get_connection()
+    if not db:
+        return
     conn, cursor = db
     try:
         user_id = product.get('user_id')
         product_id = product.get('product_id')
         quantity = product.get('quantity')
 
-        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        insert_query = f"INSERT INTO {tableName} (user_id, product_id, quantity, date) VALUES (%s, %s, %s, %s)"
-        
-        # Execute the insert query and commit changes
-        cursor.execute(insert_query, (user_id, product_id,quantity, now))
+        select_query = f"SELECT * FROM {table_name} WHERE user_id = %s AND product_id = %s"
+        cursor.execute(select_query, (user_id, product_id))
+        existing_item = cursor.fetchone()
+
+        if existing_item:
+            new_quantity = existing_item[3] + quantity
+            update_query = f"UPDATE {table_name} SET quantity = %s WHERE user_id = %s AND product_id = %s"
+            cursor.execute(update_query, (new_quantity, user_id, product_id))
+        else:
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            insert_query = f"INSERT INTO {table_name} (user_id, product_id, quantity, date) VALUES (%s, %s, %s, %s)"
+            cursor.execute(insert_query, (user_id, product_id, quantity, now))
+
         conn.commit()
-        
+
         return True
     except Exception as e:
         print("INSERT ERROR:", str(e))
-        # Rollback changes if an error occurred
-        conn.rollback()
-        
-    return False
+        return False
 
+def remove_product(product, table_name):
+    db = get_connection()
+    if not db:
+        return
+    conn, cursor = db
+    try:
+        delete_query = f"DELETE FROM {table_name} WHERE user_id = %s AND product_id = %s"
+        cursor.execute(delete_query, (product.get('user_id'), product.get('product_id')))
+        conn.commit()
 
+        return True
+    except Exception as e:
+        print("REMOVE ERROR:", str(e))
+        return False
 
-def remove_product(product, cursor,tableName):
-	try:
-		delete_query = f"DELETE FROM {tableName} WHERE user_id = %s AND product_id = %s"
-		cursor.execute(delete_query, (product.get('user_id'), product.get('product_id')))
+def products_by_user(user_id, table_name):
+    db = get_connection()
+    if not db:
+        return
+    _, cursor = db
+    try:
+        select_query = f"SELECT * FROM {table_name} WHERE user_id = %s"
+        cursor.execute(select_query, (user_id,))
+        product_items = cursor.fetchall()
+        print(product_items)
 
-		return True
-	except Exception as e:
-		print("REMOVE ERROR:", str(e))
-		
-	return False
+        selected_products = []
 
+        for product_item in product_items:
+            user_id = product_item['user_id']
+            product_id = product_item['product_id']
+            quantity = product_item['quantity']
+            selected_products.append({
+                'user_id': user_id,
+                'product_id': product_id,
+                'quantity': quantity
+            })
+            print(product_item)
 
-def products_by_user(user_id, cursor,tableName):
-	try:
-		select_query = f"SELECT * FROM {tableName} WHERE user_id = %s"
-		cursor.execute(select_query, (user_id,))
-		product_items = cursor.fetchall()
+        return selected_products
+    except Exception as e:
+        print("PRODUCTS ERROR:", str(e))
+        return None
 
-		# Prepare a list to hold the selected products
-		selected_products = []
-
-		for product_item in product_items:
-			user_id = product_item[1]
-			product_id = product_item[2]
-			quantity = product_item[3]
-			selected_products.append({
-				'user_id': user_id,
-				'product_id': product_id,
-				'quantity': quantity
-			})
-
-		return selected_products
-	except Exception as e:
-		print("PRODUCTS ERROR:", str(e))
-		
-	return None
-
-
-def insert_review(review, cursor):
-	try:
-		now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-		insert_query = "INSERT INTO reviews (user_id, product_id, rating, feedback, date) VALUES (%s, %s, %s, %s, %s)"
-		values = (review['user_id'], review['product_id'], review['rating'], review['feedback'], now)
-		cursor.execute(insert_query, values)
-
-		return True
-
-	except Exception as e:
-		return str(e)
+def insert_review(review):
+    db = get_connection()
+    if not db:
+        return
+    _, cursor = db
+    try:
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        insert_query = "INSERT INTO reviews (user_id, product_id, rating, feedback, date) VALUES (%s, %s, %s, %s, %s)"
+        values = (review['user_id'], review['product_id'], review['rating'], review['feedback'], now)
+        cursor.execute(insert_query, values)
+        return True
+    except Exception as e:
+        return str(e)
 
 def fetch_product_review(product_id, cursor):
-	try:
-		query = "SELECT AVG(rating) AS average_rating FROM reviews WHERE product_id = %s"
-		cursor.execute(query, (product_id,))
+    try:
+        query = "SELECT AVG(rating) AS average_rating FROM reviews WHERE product_id = %s"
+        cursor.execute(query, (product_id,))
+        result = cursor.fetchone()
 
-
-		result = cursor.fetchone()
-
-		if result and result['average_rating'] is not None:
-			return result['average_rating']
-		else:
-			return "Product not found or no reviews available."
-
-	except Exception as e:
-		return str(e)
+        if result and result['average_rating'] is not None:
+            return result['average_rating']
+        else:
+            return "Product not found or no reviews available."
+    except Exception as e:
+        return str(e)
