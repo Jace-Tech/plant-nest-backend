@@ -9,8 +9,8 @@ tableName = "wishlist_items"
 
 
 @wishlist.post('/add')
-def add_to_wishlist(cursor):
-    product =  request.json()
+def add_to_wishlist():
+    product =  request.json
     
     status = insert_item(product,cursor,tableName); 
     
@@ -45,7 +45,7 @@ def get_wishlist_contents(user_id):
 
 @wishlist.post('/remove')
 def remove_from_wishlist():
-    product =  request.json()
+    product =  request.json
     status = remove_product(product,cursor,tableName)
     if status == True:
         return response(f"Item removed from the wishlist successfully")
