@@ -9,6 +9,9 @@ from ..utils.decorators import admin_required
 admin_review = Blueprint("admin_review", __name__)
 
 
+
+
+
 @admin_review.get('/')
 @admin_required
 def view_all_reviews():
@@ -22,16 +25,25 @@ def view_all_reviews():
         return render_template("reviews.html", reviews=all_reviews)
     
 @admin_review.get('/ratings')
+@admin_required
 def get_products_with_average_ratings_route():
+    
+    products_with_ratings = []  
+ 
+    
+ 
     try:
+        
         products_with_ratings = fetch_products_with_average_ratings()
-        if not products_with_ratings:
-            flash("An error occurred while fetching product ratings.", category="error")
+        print("products_with_ratings")
+        
+       
+      
     except Exception as e:
         flash(str("check"), category="error")
-        products_with_ratings = []
-
-    return render_template("productRatings.html", products_with_ratings=products_with_ratings)
+        
+    finally:
+        return render_template("productRatings.html", products_with_ratings=products_with_ratings)
 
 
 
@@ -39,15 +51,17 @@ def get_products_with_average_ratings_route():
 @admin_review.get('/product/<product_id>')
 @admin_required
 def view_product_details(product_id):
+    product_details = []
+    
+    
+    
     try:
         product_details = select_product(product_id)
-        if not product_details:
-            flash("Product not found.", category="error")
-            return redirect(url_for("admin_review.view_all_reviews"))
-
+    
+        
         average_rating = calculate_average_rating(product_id)
 
-        return render_template("admin/product_details.html", product=product_details, average_rating=average_rating)
+        return render_template("product_details.html", product=product_details, average_rating=average_rating)
 
     except Exception as e:
         flash(str(e), category="error")

@@ -9,6 +9,7 @@ from .plants import plants
 from .orders import orders
 from .accessory import access
 from .wishlist import wishlist
+from .feedback import feedback
 
 api = Blueprint("apis", __name__)
 
@@ -26,3 +27,4 @@ api.register_blueprint(review, url_prefix="/review")
 api.register_blueprint(plants, url_prefix="/plants")
 api.register_blueprint(access, url_prefix="/access")
 api.register_blueprint(orders, url_prefix="/orders")
+api.register_blueprint(feedback, url_prefix="/feedback")

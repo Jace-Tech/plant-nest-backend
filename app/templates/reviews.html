@@ -3,7 +3,7 @@
 
 {% macro review_row(review) %}
 <tr>
-  <td class="hidden">{{ review.get('review_id') }}</td>
+
   <td>{{ review.get('product_id') }}</td>
   <td>{{ review.get('rating') }}</td>
   <td>{{ review.get('feedback') }}</td>
@@ -22,7 +22,7 @@
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead>
           <tr>
-            <th class="hidden">Review ID</th>
+           
             <th>Product ID</th>
             <th>Rating</th>
             <th>Feedback</th>
@@ -31,7 +31,7 @@
         </thead>
         <tfoot>
           <tr>
-            <th class="hidden">Review ID</th>
+          
             <th>Product ID</th>
             <th>Rating</th>
             <th>Feedback</th>

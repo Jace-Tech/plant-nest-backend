@@ -1,22 +1,22 @@
 from . import get_connection
 
 
-def select_product(product_id,cursor):
-	try:
-		# Prepare and execute the SQL query
-		query = "SELECT * FROM plants WHERE plant_id = %s"
-		cursor.execute(query, (product_id,))
+def select_product(product_id):
+    db = get_connection()
+    if not db:
+        return
+    _, cursor = db
+    try:
+        query = "SELECT * FROM plants WHERE plant_id = %s"
+        cursor.execute(query, (product_id,))
+        product = cursor.fetchone()
 
-		# Fetch the result
-		product = cursor.fetchone()
-
-		if product:
-			return str(product)
-		else:
-			return "Plant not found."
-	except Exception as e:
-		return str(e)
-
+        if product:
+            return product
+        else:
+            return "Plant not found."
+    except Exception as e:
+        return str(e)
 
 
 def create_reviews_table():
@@ -49,21 +49,42 @@ def get_all_reviews():
 
     cursor.execute(sql)
     reviews = cursor.fetchall()
+   
+    print(reviews)
+    
 
     reviews_with_products = []
 
     for review in reviews:
         product_id = review['product_id']
-        product = select_product(product_id, cursor)
+        rate = review['rating']
+        print(rate)
+        feedback = review['feedback']
+        print(feedback)
+        Date = review['date']
+        print(Date)
+        product = select_product(product_id)
+        print(product)  
         
         if product:
             review['product_name'] = product['name']
-            reviews_with_products.append(review)
-
+            reviews_with_products.append({
+                'product_id': product_id,
+                'name': product['name'],
+                'rate' : rate,
+                'feedback' : feedback,
+                "date" : Date
+            })
+        print(product)
     return reviews_with_products
 
-def calculate_average_rating(product_id, cursor):
+def calculate_average_rating(product_id):
     try:
+        db = get_connection()
+        if not db:
+            return []
+        
+        _, cursor = db
         ratings_query = f"SELECT SUM(rating) as total_rating FROM reviews WHERE product_id = %s"
         cursor.execute(ratings_query, (product_id,))
         total_rating = cursor.fetchone()['total_rating']
@@ -83,6 +104,7 @@ def calculate_average_rating(product_id, cursor):
 
 
 def fetch_products_with_average_ratings():
+   
     try:
         db = get_connection()
         if not db:
@@ -90,31 +112,37 @@ def fetch_products_with_average_ratings():
         
         _, cursor = db
         
-        products_query = "SELECT product_id, product_name, price, quantity FROM products"
+        print("here2")
+        
+        products_query = "SELECT * FROM plants"
         cursor.execute(products_query)
         products = cursor.fetchall()
+        
         
         products_with_ratings = []
         
         for product in products:
-            product_id = product['product_id']
-            product_details = select_product(product_id, cursor)
+            
+            product_id = product['plant_id']
+            product_details = select_product(product_id)
+           
             
             if product_details:
-                average_rating = calculate_average_rating(product_id, cursor)
+                average_rating = calculate_average_rating(product['plant_id'])
+                
                 
                 products_with_ratings.append({
-                    'product_name': product_details.get('name'),
+                    "product_id": product_id,
+                    'name': product['name'],
                     'price': product['price'],
                     'quantity': product['quantity'],
-                    'average_rating': average_rating
+                    'rating': average_rating
                 })
-        
+                
+        print(products_with_ratings)
         return products_with_ratings
     
     except Exception as e:
         return False
     
-    finally:
-        if db:
-            db.close()
+ 

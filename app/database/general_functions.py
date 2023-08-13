@@ -96,21 +96,33 @@ def insert_review(review):
     db = get_connection()
     if not db:
         return
-    _, cursor = db
+    conn, cursor = db
     try:
+        user_id = review.get('user_id')
+        product_id = review.get('product_id')
+        rating = review.get('rating')
+        feedback = review.get('feedback')
+        
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         insert_query = "INSERT INTO reviews (user_id, product_id, rating, feedback, date) VALUES (%s, %s, %s, %s, %s)"
-        values = (review['user_id'], review['product_id'], review['rating'], review['feedback'], now)
+        values = (user_id, product_id, rating, feedback, now)
         cursor.execute(insert_query, values)
+        conn.commit()
         return True
     except Exception as e:
+        print (str(e))
         return str(e)
 
-def fetch_product_review(product_id, cursor):
+def fetch_product_review(product_id):
+    db = get_connection()
+    if not db:
+        return
+    _, cursor = db
     try:
         query = "SELECT AVG(rating) AS average_rating FROM reviews WHERE product_id = %s"
         cursor.execute(query, (product_id,))
         result = cursor.fetchone()
+        print(result)
 
         if result and result['average_rating'] is not None:
             return result['average_rating']
@@ -118,3 +130,29 @@ def fetch_product_review(product_id, cursor):
             return "Product not found or no reviews available."
     except Exception as e:
         return str(e)
+
+
+
+def insert_feedback(feedbacks):
+    db = get_connection()
+    if not db:
+        return
+    conn, cursor = db
+    try:
+        name = feedbacks.get('name')
+        email = feedbacks.get('email')
+        message = feedbacks.get('message')
+       
+        
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        insert_query = "INSERT INTO feedback (name, email, message, date) VALUES (%s, %s, %s, %s, %s)"
+        values = (name, email, message, now)
+        cursor.execute(insert_query, values)
+        conn.commit()
+        return True
+    except Exception as e:
+        print (str(e))
+        return str(e)
+
+
+

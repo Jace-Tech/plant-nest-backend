@@ -6,9 +6,7 @@ from ..database.general_functions import select_product,select_product,insert_it
 
 cart = Blueprint("cart", __name__)
 
-db = get_connection()
-connection, cursor = db
-
+connection, cursor = get_connection()
 
 tableName = "cart_items"
 
@@ -17,7 +15,7 @@ tableName = "cart_items"
 def add_to_cart():
     product =  request.json
     
-    status = insert_item(product,cursor,tableName); 
+    status = insert_item(product,tableName); 
     
     
     if status == True:
