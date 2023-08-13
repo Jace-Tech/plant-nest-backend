@@ -23,16 +23,17 @@ def view_all_reviews():
     
 @admin_review.get('/ratings')
 def get_products_with_average_ratings_route():
-    products_with_ratings = None
     try:
-        
         products_with_ratings = fetch_products_with_average_ratings()
+        if not products_with_ratings:
+            flash("An error occurred while fetching product ratings.", category="error")
     except Exception as e:
-        flash(str(e),category="error")
-        
-    finally:
-        
-        return render_template("productRatings.html",products_with_ratings)
+        flash(str("check"), category="error")
+        products_with_ratings = []
+
+    return render_template("productRatings.html", products_with_ratings=products_with_ratings)
+
+
 
 
 @admin_review.get('/product/<product_id>')

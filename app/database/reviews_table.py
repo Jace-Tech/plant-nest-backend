@@ -39,7 +39,7 @@ def create_reviews_table():
     print("TABLE CREATED!")
     connection.close()
 
-def get_all_reviews(cursor):
+def get_all_reviews():
     """Returns all the reviews with corresponding product names"""
 
     db = get_connection()
@@ -82,12 +82,11 @@ def calculate_average_rating(product_id, cursor):
         return False
 
 
-
 def fetch_products_with_average_ratings():
     try:
         db = get_connection()
         if not db:
-            return
+            return []
         
         _, cursor = db
         
