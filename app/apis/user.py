@@ -1,12 +1,18 @@
-from flask import Blueprint, redirect, request, url_for, jsonify, session
+from flask import Blueprint, request, jsonify, render_template, current_app
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from functools import wraps
 from ..database import get_connection
 from ..database.user_table import get_one_user
-from ..utils.helpers import dict_except, response
+from ..database.order_table import get_order_by_id, get_users_order
+from ..database.notification_table import create_notification
+from ..utils.helpers import dict_except, response, generate_id
 from ..utils.mailer import send_mail
 from ..utils.errors import CustomRequestError, catch_exception
 import bcrypt
+from ..utils.variables import APP_LOGO
+import json
+import datetime
+
 
 user = Blueprint("user", __name__)
 connection, cursor = get_connection()
@@ -79,57 +85,3 @@ def edit_profile():
 
 #     # SEND EMAIL FOR EMAIL VERIFICATION
     
-
-
-@user.put('/change-password')
-@catch_exception
-@jwt_required()
-def handle_change_password():
-    current_user_id = get_jwt_identity()
-
-    data = request.get_json()
-    old_password = data.get("oldPassword")
-    new_password = data.get("newPassword")
-
-    sql = "SELECT password FROM users WHERE user_id = %s"
-    cursor.execute(sql, (current_user_id,))
-    user = cursor.fetchone()
-
-    if not user or not bcrypt.checkpw(old_password.encode("utf-8"), user["password"].encode("utf-8")):
-        return jsonify({"message": "Invalid old password"}), 401
-
-    # Hash the new password
-    hashed_new_password = bcrypt.hashpw(new_password.encode("utf-8"), bcrypt.gensalt())
-
-    cursor.execute("UPDATE users SET password = %s WHERE user_id = %s", (hashed_new_password, current_user_id))
-    connection.commit()
-    cursor.close()
-
-    return jsonify({"message": "Password changed successfully"}), 200
-
-
-@user.post('/reset-password')
-@catch_exception
-def handle_reset_password():
-    data = request.get_json()
-
-    email = data.get("email")
-    new_password = data.get("new_password")
-
-    # Retrieve the user from the database
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-    user = cursor.fetchone()
-
-    if user:
-        # Hash the new password
-        hashed_password = bcrypt.hashpw(new_password.encode("utf-8"), bcrypt.gensalt())
-
-        # Update the user's password in the database
-        sql = "UPDATE users SET password = %s WHERE username = %s"
-        cursor.execute(sql, (hashed_password, email))
-        connection.commit()
-        cursor.close()
-
-        return jsonify({"message": "Password reset successful"}), 200
-    else:
-        return jsonify({"message": "User not found"}), 404
