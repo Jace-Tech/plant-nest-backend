@@ -5,18 +5,19 @@ from ..database import get_connection
 from ..database.order_table import get_order_by_id, get_users_order
 from ..database.user_table import get_one_user
 from ..database.notification_table import create_notification
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 from ..utils.variables import APP_LOGO
 from ..utils.mailer import send_mail
 import json
 import datetime
 
-order_api = Blueprint("api_order", __name__)
+orders = Blueprint("orders", __name__)
 
-@order_api.post("/create")
+@orders.post("/create")
 @catch_exception
-@jwt_required
+# @jwt_required
 def create_order_():
+    verify_jwt_in_request()
     user_id = get_jwt_identity()
     user = get_one_user(user_id)
     if not user: raise CustomRequestError("No user found", 404)
@@ -61,7 +62,7 @@ def create_order_():
 
 
 # GET ORDER BY ID
-@order_api.get("/<id>")
+@orders.get("/<id>")
 @catch_exception
 def handle_get_order(id):
     order = get_order_by_id(id)
@@ -69,10 +70,10 @@ def handle_get_order(id):
 
 
 # GET USERS ORDER
-@order_api.get("/user")
-@catch_exception
-@jwt_required
+@orders.get("/user")
+@catch_exception    
 def handle_get_users_order():
+    verify_jwt_in_request()
     user_id = get_jwt_identity()
     users_orders = get_users_order(user_id)
     return response("Users order", users_orders)
