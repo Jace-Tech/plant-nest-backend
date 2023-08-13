@@ -44,7 +44,7 @@ def create_order_():
     conn.commit()
 
     # NOTIFY ADMIN
-    create_notification(f"Order request", "Customer with {user_id} requested for an order", "ADMIN")
+    create_notification("Order request", f"Customer with {user_id} requested for an order", "ADMIN")
 
     # SEND USER EMAIL
     message = render_template("email/order.html", 

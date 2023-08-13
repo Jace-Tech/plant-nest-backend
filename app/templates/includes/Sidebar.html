@@ -69,7 +69,7 @@
   <div class="sidebar-heading">users</div>
 
   <!-- Nav Item - Customers -->
-  <li class="nav-item {% if title|lower == 'customer' %} {{ 'active' }} {% endif %}">
+  <li class="nav-item {% if title|lower == 'customers' %} {{ 'active' }} {% endif %}">
     <a class="nav-link collapsed" href="/customers" aria-expanded="true"
       aria-controls="plants">
       <i class="fas fa-fw fa-users"></i>
@@ -78,13 +78,13 @@
   </li>
 
   <!-- Nav Item - Orders -->
-  <!-- <li class="nav-item {% if title|lower == 'order' %} {{ 'active' }} {% endif %}">
-    <a class="nav-link collapsed" href="/orders" aria-expanded="true"
+  <li class="nav-item {% if title|lower == 'order' %} {{ 'active' }} {% endif %}">
+    <a class="nav-link collapsed" href="/order" aria-expanded="true"
       aria-controls="plants">
       <i class="fas fa-fw fa-money-bill-wave"></i>
       <span>Orders</span>
     </a>
-  </li> -->
+  </li>
 
 
   <!-- Divider -->
@@ -98,7 +98,7 @@
   <li class="nav-item {% if title|lower == 'review' %} {{ 'active' }} {% endif %}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#reviews" aria-expanded="true"
       aria-controls="reviews">
-      <i class="fas fa-fw fa-users"></i>
+      <i class="fas fa-fw fa-file"></i>
       <span>Reviews</span>
     </a>
     <div id="reviews" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -109,14 +109,11 @@
     </div>
   </li>
 
-  <div class="sidebar-heading"> feedbacks</div>
-
-  <!-- Nav Item - Customers -->
 
   <li class="nav-item {% if title|lower == 'review' %} {{ 'active' }} {% endif %}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#feedbacks" aria-expanded="true"
       aria-controls="feedbacks">
-      <i class="fas fa-fw fa-users"></i>
+      <i class="fas fa-fw fa-comments"></i>
       <span>Feedbacks</span>
     </a>
     <div id="feedbacks" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
