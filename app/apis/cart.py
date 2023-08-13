@@ -17,7 +17,7 @@ tableName = "cart_items"
 def add_to_cart():
     product =  request.json
     
-    status = insert_item(product,tableName); 
+    status = insert_item(product,cursor,tableName); 
     
     
     if status == True:
