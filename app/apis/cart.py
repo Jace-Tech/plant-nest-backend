@@ -8,6 +8,7 @@ cart = Blueprint("cart", __name__)
 
 db = get_connection()
 connection, cursor = db
+
 tableName = "cart_items"
 
 
@@ -48,7 +49,7 @@ def get_cart_contents(user_id):
 
 @cart.post('/remove')
 def remove_from_cart():
-    product =  request.json()
+    product =  request.json
     status = remove_product(product,cursor,tableName)
     if status == True:
         return response(f"Item removed from the cart successfully")

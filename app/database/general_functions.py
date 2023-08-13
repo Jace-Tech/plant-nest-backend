@@ -16,33 +16,28 @@ def select_product(product_id,cursor):
 		return str(e)
 
 
-def insert_item(product, db ,tableName):
-	conn, cursor = db
-	try:
-		user_id = product.get('user_id')
-		product_id = product.get('product_id')
-		quantity = product.get('quantity')
+def insert_item(product, db, tableName):
+    conn, cursor = db
+    try:
+        user_id = product.get('user_id')
+        product_id = product.get('product_id')
+        quantity = product.get('quantity')
 
-		select_query = f"SELECT * FROM {tableName} WHERE user_id = %s AND product_id = %s"
-		cursor.execute(select_query, (user_id, product_id))
-		existing_item = cursor.fetchone()
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        insert_query = f"INSERT INTO {tableName} (user_id, product_id, quantity, date) VALUES (%s, %s, %s, %s)"
+        
+        # Execute the insert query and commit changes
+        cursor.execute(insert_query, (user_id, product_id,quantity, now))
+        conn.commit()
+        
+        return True
+    except Exception as e:
+        print("INSERT ERROR:", str(e))
+        # Rollback changes if an error occurred
+        conn.rollback()
+        
+    return False
 
-		if existing_item:
-			new_quantity = existing_item[3] + quantity
-			update_query = f"UPDATE {tableName} SET quantity = %s WHERE user_id = %s AND product_id = %s"
-			cursor.execute(update_query, (new_quantity, user_id, product_id))
-		else:
-			now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-			insert_query = f"INSERT INTO {tableName} (user_id, product_id, quantity, date) VALUES (%s, %s, %s, %s)"
-			cursor.execute(insert_query, (user_id, product_id, quantity, now))
-
-		conn.commit()
-
-		return True
-	except Exception as e:
-		print("INSERT ERROR:", str(e))
-		
-	return False
 
 
 def remove_product(product, cursor,tableName):
