@@ -6,20 +6,22 @@ from ..database import get_connection
 
 review = Blueprint("review", __name__)
 
-connection, cursor = get_connection()
+db = get_connection()
+connection, cursor = db
+
 
 
 @review.post('/review')
 def submit_review():
-    review = request.json('review')
-    status = insert_review(review,cursor)
+    review = request.json
+    status = insert_review(review,db)
     if status:
-         return response('Feedback submitted successfully.')
+        return response('Feedback submitted successfully.')
     else:
         return response("feedback not submitted", success=False)
 
 
-@review.get('/average_ratings/<int:product_id>')
+@review.get('/average_ratings/<product_id>')
 def average_rating(product_id):
     status = fetch_product_review(product_id,cursor)
     if status is not None :

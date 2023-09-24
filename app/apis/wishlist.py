@@ -4,7 +4,8 @@ from ..database.general_functions import select_product,select_product,insert_it
 from ..database import get_connection
 
 wishlist = Blueprint("wishlist", __name__)
-connection, cursor = get_connection()
+db = get_connection()
+connection, cursor = db
 tableName = "wishlist_items"
 
 
@@ -12,7 +13,7 @@ tableName = "wishlist_items"
 def add_to_wishlist():
     product =  request.json
     
-    status = insert_item(product,cursor,tableName); 
+    status = insert_item(product,db,tableName); 
     
     if status == True:
         return response('Item added to the wishlist successfully.')
@@ -46,7 +47,7 @@ def get_wishlist_contents(user_id):
 @wishlist.post('/remove')
 def remove_from_wishlist():
     product =  request.json
-    status = remove_product(product,cursor,tableName)
+    status = remove_product(product,db,tableName)
     if status == True:
         return response(f"Item removed from the wishlist successfully")
     else:

@@ -86,7 +86,8 @@ def handle_admin_sign_page():
         # INSERT TO DATABASE
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         sql = "INSERT INTO admins (admin_id, name, image, email, password, date) VALUES (%s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, ("ADMIN", fullname, image_url, email, hashed_password, now))
+        cursor.execute(sql, ("ADMIN", fullname, image_url,
+                       email, hashed_password, 'now()'))
         connection.commit()
 
         # CHECK IF SUCCESSFUL
