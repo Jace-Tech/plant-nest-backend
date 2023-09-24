@@ -34,12 +34,12 @@ def handle_login_page():
 
         # SET LOGIN SESSIONS
         session["logged_in"] = True
-        session["admin"] = user 
+        session["admin"] = user
 
         # REDIRECT TO DASHBOARD
         flash("Login successful", "success")
         return redirect("/dashboard")
-    
+
     except CustomError as e:
         flash(e.message, e.category)
 
@@ -49,18 +49,19 @@ def handle_login_page():
 
 
 @auth.get("/signup")
-@ensure_only_one_admin
+# @ensure_only_one_admin
 @guest_only
 def signup_page():
     return render_template("signup.html")
 
 
 @auth.post('/signup')
-@ensure_only_one_admin
+# @ensure_only_one_admin
 @guest_only
 def handle_admin_sign_page():
     try:
         data = request.form
+        print(data)
         fullname = data.get("fullName")
         email = data.get("email")
         password = data.get("password")
@@ -68,7 +69,8 @@ def handle_admin_sign_page():
         cursor.execute("SELECT * FROM admins WHERE email = %s", (email,))
         user_email = cursor.fetchone()
 
-        if user_email: raise CustomError("Email already exists")
+        if user_email:
+            raise CustomError("Email already exists")
 
         # UPLOAD IMAGE TO CLOUD
         image = request.files.get('image')
@@ -77,15 +79,18 @@ def handle_admin_sign_page():
         print('IMAGE URL:', image_url)
 
         # HASH PASSWORD
-        hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+        hashed_password = bcrypt.hashpw(
+            password.encode("utf-8"), bcrypt.gensalt())
 
         # INSERT TO DATABASE
         sql = "INSERT INTO admins (admin_id, name, image, email, password, date) VALUES (%s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, ("ADMIN", fullname, image_url, email, hashed_password, 'now()'))
+        cursor.execute(sql, ("ADMIN", fullname, image_url,
+                       email, hashed_password, 'now()'))
         connection.commit()
 
         # CHECK IF SUCCESSFUL
-        if not cursor.rowcount: raise CustomError("Failed to create admin")
+        if not cursor.rowcount:
+            raise CustomError("Failed to create admin")
 
         # REDIRECT TO LOGIN
         flash("Registration successful", "success")
