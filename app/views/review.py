@@ -14,7 +14,6 @@ admin_review = Blueprint("admin_review", __name__)
 def view_all_reviews():
     all_reviews = None
     try:
-        print("Hello")
         all_reviews = get_all_reviews()
     except Exception as e:
         flash(str(e), category="error")

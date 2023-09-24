@@ -53,12 +53,12 @@ def get_all_reviews():
     reviews_with_products = []
 
     for review in reviews:
-        product_id = review['product_id']
-        product = select_product(product_id, cursor)
-        
-        if product:
-            review['product_name'] = product['name']
-            reviews_with_products.append(review)
+        product_id = review.get('product_id')  # Use .get() to handle missing key gracefully
+        if product_id is not None:
+            product = select_product(product_id, cursor)
+            
+            if product is not None:
+                reviews_with_products.append(review)
 
     return reviews_with_products
 
