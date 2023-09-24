@@ -7,10 +7,10 @@
   <td style="white-space: nowrap;">{{ plant.get('plant_id') }}</td>
   <td style="white-space: nowrap;">{{ plant.get('name') }}</td>
   <td style="white-space: nowrap;">
-    <img src="{{ plant.get('image')[0] }}" width="50" class="img-fluid" alt="">
+    <img src="{{ plant.get('image_url')[0] }}" width="50" class="img-fluid" alt="">
   </td>
   <td style="white-space: nowrap;">&#8358; {{ plant.get('price') }}</td>
-  <td style="white-space: nowrap;">{{ plant.get('description') }}</td>
+  <td style="white-space: nowrap;" title="{{ plant.get('description') }}">{{ plant.get('description')[0:30] + "..." }}</td>
   <td style="white-space: nowrap;">{{ plant.get('quantity') }}</td>
   <td style="white-space: nowrap;">{% if plant.get('is_available')|string == 'None' %} <div class="badge badge-danger badge-sm">Out of stock</div> {% else %} <div class="badge badge-success badge-sm">Available</div> {% endif %}</td>
   <td>
@@ -28,7 +28,7 @@
     <h6 class="m-0 font-weight-bold text-primary">All Plants</h6>
     <div class="d-flex align-items-center">
       <a href="/plants/create" class="btn btn-sm btn-primary mr-2">Add plant</a>
-      <form data-upload-form action="/plants/create/bulk" method="post" enctype="multipart/form-data">
+      <!-- <form data-upload-form action="/plants/create/bulk" method="post" enctype="multipart/form-data">
         <input hidden type="file" id="input" name="file" accept=".csv" />
         <a href="" id="upload-btn" class="btn btn-sm btn-secondary btn-icon-split">
           <span class="icon text-white-50">
@@ -36,7 +36,7 @@
           </span>
           <span class="text">Upload CSV</span>
         </a>
-      </form>
+      </form> -->
     </div>
   </div>
   {% if plants|length %}

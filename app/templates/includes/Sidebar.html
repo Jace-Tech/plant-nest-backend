@@ -69,7 +69,7 @@
   <div class="sidebar-heading">users</div>
 
   <!-- Nav Item - Customers -->
-  <li class="nav-item {% if title|lower == 'customer' %} {{ 'active' }} {% endif %}">
+  <li class="nav-item {% if title|lower == 'customers' %} {{ 'active' }} {% endif %}">
     <a class="nav-link collapsed" href="/customers" aria-expanded="true"
       aria-controls="plants">
       <i class="fas fa-fw fa-users"></i>
@@ -79,7 +79,7 @@
 
   <!-- Nav Item - Orders -->
   <li class="nav-item {% if title|lower == 'order' %} {{ 'active' }} {% endif %}">
-    <a class="nav-link collapsed" href="/orders" aria-expanded="true"
+    <a class="nav-link collapsed" href="/order" aria-expanded="true"
       aria-controls="plants">
       <i class="fas fa-fw fa-money-bill-wave"></i>
       <span>Orders</span>
@@ -94,13 +94,36 @@
   <div class="sidebar-heading"> reviews</div>
 
   <!-- Nav Item - Customers -->
-  <li class="nav-item {% if title|lower == 'customer' %} {{ 'active' }} {% endif %}">
-    <a class="nav-link collapsed" href="/reviews" aria-expanded="true"
-      aria-controls="plants">
-      <i class="fas fa-fw fa-users"></i>
-      <span>Product Review</span>
+
+  <li class="nav-item {% if title|lower == 'review' %} {{ 'active' }} {% endif %}">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#reviews" aria-expanded="true"
+      aria-controls="reviews">
+      <i class="fas fa-fw fa-file"></i>
+      <span>Reviews</span>
     </a>
+    <div id="reviews" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <a class="collapse-item" href="/admin_review">All Reviews</a>
+        <a class="collapse-item" href="/admin_review/ratings">Products Ratings</a>
+      </div>
+    </div>
   </li>
+
+
+  <li class="nav-item {% if title|lower == 'review' %} {{ 'active' }} {% endif %}">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#feedbacks" aria-expanded="true"
+      aria-controls="feedbacks">
+      <i class="fas fa-fw fa-comments"></i>
+      <span>Feedbacks</span>
+    </a>
+    <div id="feedbacks" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <a class="collapse-item" href="/feedback">All Feedback</a>
+       
+      </div>
+    </div>
+  </li>
+  
  
   <!-- Sidebar Toggler (Sidebar) -->
   <div class="text-center d-none d-md-inline">

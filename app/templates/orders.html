@@ -1,2 +1,95 @@
-{% set title = "Order" %}
+{% set title = "Orders" %}
 {% extends "_layout.html" %}
+
+{# PLANT MACROS #}
+{% macro order_row(order) %}
+<tr>
+  <td style="white-space: nowrap;">{{ order.get('order_id') }}</td>
+  <td style="white-space: nowrap;">{{ order.get('user_id') }}</td>
+  <td style="white-space: nowrap;">{{ order.get('firstname') }}</td>
+  <td style="white-space: nowrap;">{{ order.get('lastname') }}</td>
+  <td style="white-space: nowrap;">&#8358; {{ order.get('amount') }}</td>
+  <td style="white-space: nowrap;">{{ order.get('address') }}</td>
+  <td style="white-space: nowrap;">{{ order.get('email') }}</td>
+  <td style="white-space: nowrap;">
+    {% if order.get('status')|string == 'pending' %} 
+      <div class="badge badge-warning badge-sm">pending</div> 
+    {% else %} 
+      <div class="badge badge-success badge-sm">delivered</div> 
+    {% endif %}
+  </td>
+  <td>
+    <div class="d-flex">
+      {% if order.get('status')|string == 'pending' %} 
+      <a href="/order/approve/{{ order.get('order_id') }}" style="white-space: nowrap;" class="text-sm text-primary mr-3">Approve Order</a>
+      {% endif %}
+      <a href="/order/delete/{{ order.get('order_id') }}" class="text-sm text-danger">Delete</a>
+    </div>
+  </td>
+</tr>
+{% endmacro %}
+
+{% block content %}
+<div class="card shadow mb-4">
+  <div class="card-header d-flex align-items-center justify-content-between py-3">
+    <h6 class="m-0 font-weight-bold text-primary">All orders</h6>
+  </div>
+  {% if orders|length %}
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User ID</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Amount</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>Order ID</th>
+            <th>User ID</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Amount</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </tfoot>
+        <tbody>
+          {# PRINT PLANT ROWS #}
+          {% for order in orders %}
+            {{ order_row(order) }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="text-center py-5 ">
+    <img src="/static/svgs/empty.svg" width="100" class="mx-auto img-fluid mb-5" />
+    <p class="text-muted text-center mb-1">No order available</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Page level plugins -->
+    <script src="/static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $('#dataTable').DataTable();
+  });
+</script>
+{% endblock %}

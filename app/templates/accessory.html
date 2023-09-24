@@ -6,7 +6,7 @@
   <td style="white-space: nowrap;">{{ accessory.get('accessory_id') }}</td>
   <td style="white-space: nowrap;">{{ accessory.get('name') }}</td>
   <td style="white-space: nowrap;">&#8358; {{ accessory.get('price') }}</td>
-  <td style="white-space: nowrap;">{{ accessory.get('description') }}</td>
+  <td style="white-space: nowrap;" title="{{ accessory.get('description') }}">{{ accessory.get('description')[0:30] + "..." }}</td>
   <td style="white-space: nowrap;">{{ accessory.get('quantity') }}</td>
   <td style="white-space: nowrap;">{% if accessory.get('is_available')|string == 'None' %} <div class="badge badge-danger badge-sm">Not Available</div> {% else %} <div class="badge badge-success badge-sm">Available</div> {% endif %}</td>
   <td>
@@ -24,7 +24,7 @@
     <h6 class="m-0 font-weight-bold text-primary">All Accessories</h6>
     <div class="d-flex align-items-center">
       <a href="/accessories/create" class="btn btn-sm btn-primary mr-2">Add accessory</a>
-      <form data-upload-form action="/accessories/create/bulk" method="post" enctype="multipart/form-data">
+      <!-- <form data-upload-form action="/accessories/create/bulk" method="post" enctype="multipart/form-data">
         <input hidden type="file" id="input" name="file" accept=".csv" />
         <a href="" id="upload-btn" class="btn btn-sm btn-secondary btn-icon-split">
           <span class="icon text-white-50">
@@ -32,7 +32,7 @@
           </span>
           <span class="text">Upload CSV</span>
         </a>
-      </form>
+      </form> -->
     </div>
   </div>
   {% if accessories|length %}

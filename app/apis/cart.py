@@ -6,14 +6,16 @@ from ..database.general_functions import select_product,select_product,insert_it
 
 cart = Blueprint("cart", __name__)
 
-connection, cursor = get_connection()
+db = get_connection()
+connection, cursor = db
+
 tableName = "cart_items"
 
 
 @cart.post('/add')
-def add_to_cart(cursor):
+def add_to_cart():
     product =  request.json()
-    status = insert_item(product,cursor,tableName); 
+    status = insert_item(product,db,tableName); 
     
     if status == True:
         return response('Item added to the cart successfully.')
@@ -47,7 +49,7 @@ def get_cart_contents(user_id):
 
 @cart.post('/remove')
 def remove_from_cart():
-    product =  request.json()
+    product =  request.json
     status = remove_product(product,cursor,tableName)
     if status == True:
         return response(f"Item removed from the cart successfully")

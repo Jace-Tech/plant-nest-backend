@@ -5,7 +5,7 @@ from ..database.order_table import get_all_orders, get_amount_for_period
 from ..database.plant_table import get_all_plants
 from ..database import get_connection
 from ..database.user_table import get_all_users
-from ..database.feedback_table import get_all_reviews
+from ..database.reviews_table import get_all_reviews
 
 from ..utils.decorators import admin_required
 from ..utils.errors import CustomError
@@ -79,3 +79,11 @@ dashboard.register_blueprint(category, url_prefix="/categories")
 # CUSTOMER ROUTES
 from .customers import customer
 dashboard.register_blueprint(customer, url_prefix="/customers")
+
+#ADMIN REVIEWS ROUTES
+from .review import admin_review
+dashboard.register_blueprint(admin_review, url_prefix="/admin_review")
+
+# ORDERS ROUTES
+from .orders import order
+dashboard.register_blueprint(order, url_prefix="/order")

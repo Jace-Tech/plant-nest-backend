@@ -4,6 +4,7 @@ from ..database import get_connection
 from ..utils.errors import CustomError
 from ..utils.uploader import upload_file
 from ..utils.decorators import ensure_only_one_admin, guest_only
+from datetime import datetime
 
 auth = Blueprint("auth", __name__)
 app = current_app
@@ -83,9 +84,9 @@ def handle_admin_sign_page():
             password.encode("utf-8"), bcrypt.gensalt())
 
         # INSERT TO DATABASE
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         sql = "INSERT INTO admins (admin_id, name, image, email, password, date) VALUES (%s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, ("ADMIN", fullname, image_url,
-                       email, hashed_password, 'now()'))
+        cursor.execute(sql, ("ADMIN", fullname, image_url, email, hashed_password, now))
         connection.commit()
 
         # CHECK IF SUCCESSFUL

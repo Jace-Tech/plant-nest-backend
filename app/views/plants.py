@@ -8,6 +8,7 @@ from ..utils.errors import CustomError
 from ..utils.helpers import generate_id
 from ..utils.uploader import upload_file
 from ..utils.decorators import admin_required
+from datetime import datetime
 
 plants = Blueprint("plants", __name__)
 
@@ -84,10 +85,10 @@ def handle_plant_create():
         conn, cursor = db
 
         # STORE IN DB
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         query = "INSERT INTO plants (plant_id, name, description, price, quantity, image_url, category_id, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (plant_id, plant_name, description,
-                       price, quantity, image_urls, category, 'now()'))
-        conn.commit()
+        cursor.execute(query, (plant_id, plant_name, description, price, quantity, image_urls, category, now))
+        conn.commit() 
 
         if not cursor.rowcount:
             raise CustomError("Failed to create plant")
