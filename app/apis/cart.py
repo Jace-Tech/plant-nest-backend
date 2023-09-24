@@ -22,7 +22,7 @@ def add_to_cart():
     
     return response('Item was not added to the cart successfully.', success=False)
     
-    
+
 @cart.get('/<user_id>')
 def get_cart_contents(user_id):
     
