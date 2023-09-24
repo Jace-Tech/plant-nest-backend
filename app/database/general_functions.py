@@ -40,10 +40,12 @@ def insert_item(product, db, tableName):
 
 
 
-def remove_product(product, cursor,tableName):
+def remove_product(product, db,tableName):
+	connection, cursor = db
 	try:
 		delete_query = f"DELETE FROM {tableName} WHERE user_id = %s AND product_id = %s"
 		cursor.execute(delete_query, (product.get('user_id'), product.get('product_id')))
+		connection.commit()
 
 		return True
 	except Exception as e:
@@ -78,12 +80,14 @@ def products_by_user(user_id, cursor,tableName):
 	return None
 
 
-def insert_review(review, cursor):
+def insert_review(review, db):
+	connection, cursor = db
 	try:
 		now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 		insert_query = "INSERT INTO reviews (user_id, product_id, rating, feedback, date) VALUES (%s, %s, %s, %s, %s)"
 		values = (review['user_id'], review['product_id'], review['rating'], review['feedback'], now)
 		cursor.execute(insert_query, values)
+		connection.commit()
 
 		return True
 

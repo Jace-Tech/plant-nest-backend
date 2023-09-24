@@ -12,15 +12,17 @@ from datetime import datetime
 
 plants = Blueprint("plants", __name__)
 
+
 @plants.get("/")
 @admin_required
 def view_plant_page():
     all_plants = None
     try:
         db = get_connection()
-        if not db: raise CustomError("Failed to connect to database")
+        if not db:
+            raise CustomError("Failed to connect to database")
         all_plants = get_all_plants()
-    except CustomError as e: 
+    except CustomError as e:
         flash(e.message, category=e.category)
 
     except Exception as e:
@@ -37,10 +39,11 @@ def view_plant_create_page():
 
     try:
         db = get_connection()
-        if not db: raise CustomError("Failed to connect to database")
+        if not db:
+            raise CustomError("Failed to connect to database")
         all_categories = get_all_categories()
 
-    except CustomError as e: 
+    except CustomError as e:
         flash(e.message, category=e.category)
 
     except Exception as e:
@@ -77,7 +80,8 @@ def handle_plant_create():
         image_urls = json.dumps(image_urls)
 
         db = get_connection()
-        if not db: raise CustomError("Failed to connect to database")
+        if not db:
+            raise CustomError("Failed to connect to database")
         conn, cursor = db
 
         # STORE IN DB
@@ -86,12 +90,13 @@ def handle_plant_create():
         cursor.execute(query, (plant_id, plant_name, description, price, quantity, image_urls, category, now))
         conn.commit() 
 
-        if not cursor.rowcount: raise CustomError("Failed to create plant")
+        if not cursor.rowcount:
+            raise CustomError("Failed to create plant")
 
         flash("Plant created!", "success")
         return redirect(url_for('dashboard.plants.view_plant_page'))
 
-    except CustomError as e: 
+    except CustomError as e:
         flash(e.message, category=e.category)
 
     except Exception as e:
@@ -107,7 +112,8 @@ def handle_plant_delete(id):
     try:
         # CHECK CONNECTION
         db = get_connection()
-        if not db: raise CustomError("Couldn't connect to database", "error")
+        if not db:
+            raise CustomError("Couldn't connect to database", "error")
 
         conn, cursor = db
         sql = "DELETE FROM plants WHERE plant_id = %s"
@@ -115,13 +121,13 @@ def handle_plant_delete(id):
         conn.commit()
         conn.close()
 
-        if not cursor.rowcount: raise CustomError("Failed to delete plant", "error")
+        if not cursor.rowcount:
+            raise CustomError("Failed to delete plant", "error")
         flash("Plant deleted successfully", "success")
         conn.close()
     except CustomError as e:
         flash(e.message, e.category)
     return redirect("/plants")
-
 
 
 @plants.get("/edit/<id>")
@@ -132,14 +138,16 @@ def handle_plant_edit(id):
     try:
         # CHECK CONNECTION
         db = get_connection()
-        if not db: raise CustomError("Couldn't connect to database", "error")
+        if not db:
+            raise CustomError("Couldn't connect to database", "error")
         categories = get_all_categories()
 
         conn, cursor = db
         sql = "SELECT * FROM plants WHERE plant_id = %s"
         cursor.execute(sql, [id])
 
-        if not cursor.rowcount: raise CustomError("Plant not found", "error")
+        if not cursor.rowcount:
+            raise CustomError("Plant not found", "error")
         plant = cursor.fetchone()
         conn.close()
     except CustomError as e:
@@ -154,7 +162,8 @@ def handle_plant_update(id):
     try:
         # CHECK CONNECTION
         db = get_connection()
-        if not db: raise CustomError("Couldn't connect to database", "error")
+        if not db:
+            raise CustomError("Couldn't connect to database", "error")
         conn, cursor = db
 
         # GET PLANT DETAILS
@@ -180,14 +189,16 @@ def handle_plant_update(id):
         sql = """UPDATE plants 
             SET name = %s, description = %s, price = %s, quantity = %s, image_url = %s, category_id = %s
             WHERE plant_id = %s"""
-        cursor.execute(sql, [plant_name, description, price, quantity, image_urls, category, id])
+        cursor.execute(sql, [plant_name, description, price,
+                       quantity, image_urls, category, id])
         conn.commit()
         conn.close()
 
-        if not cursor.rowcount: raise CustomError("Failed to update plant", "error")
+        if not cursor.rowcount:
+            raise CustomError("Failed to update plant", "error")
         flash("Plant updated", "success")
         return redirect("/plants")
-    
+
     except CustomError as e:
         flash(e.message, e.category)
 
@@ -197,13 +208,13 @@ def handle_plant_update(id):
     return render_template("edit-plant.html", plant=plant)
 
 
-
 @plants.post("/plants/create/bulk")
 def handle_create_bluk():
     try:
         # GET UPLOADED FILES
         file = request.files.get("file")
-        if not file.filename: raise CustomError("File not found")
+        if not file.filename:
+            raise CustomError("File not found")
         data = []
 
         reader = csv.reader(file)
@@ -213,4 +224,4 @@ def handle_create_bluk():
         return data
     except Exception as e:
         # flash(str(e), "error")
-        return { 'success': True }
+        return {'success': True}

@@ -14,7 +14,7 @@ tableName = "cart_items"
 
 @cart.post('/add')
 def add_to_cart():
-    product =  request.json()
+    product =  request.json
     status = insert_item(product,db,tableName); 
     
     if status == True:
@@ -50,7 +50,7 @@ def get_cart_contents(user_id):
 @cart.post('/remove')
 def remove_from_cart():
     product =  request.json
-    status = remove_product(product,cursor,tableName)
+    status = remove_product(product,db,tableName)
     if status == True:
         return response(f"Item removed from the cart successfully")
     else:
