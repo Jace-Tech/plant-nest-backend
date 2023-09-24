@@ -13,7 +13,7 @@ tableName = "cart_items"
 
 
 @cart.post('/add')
-def add_to_cart(cursor):
+def add_to_cart():
     product =  request.json()
     status = insert_item(product,db,tableName); 
     
